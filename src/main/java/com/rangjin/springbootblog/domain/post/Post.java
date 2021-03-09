@@ -25,15 +25,19 @@ public class Post extends BaseTimeEntity {
 
     private String content;
 
+    private PostStatus status;
+
     @Builder
-    public Post(String title, String content) {
+    public Post(String title, String content, PostStatus status) {
         this.title = title;
         this.content = content;
+        this.status = status;
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, PostStatus status) {
         this.title = title;
         this.content = content;
+        this.status = status;
     }
 
 }
