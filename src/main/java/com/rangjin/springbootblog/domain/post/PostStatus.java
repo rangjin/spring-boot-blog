@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PostStatus {
 
-    Activated("공개"),
-    Deactivated("비공개");
+    Public("공개"),
+    Private("비공개");
 
     private final String value;
 
