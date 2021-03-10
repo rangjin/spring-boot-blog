@@ -27,9 +27,9 @@ public class CategoryService {
 
     public Long modify(Long id, CategoryRequestDto dto) {
         Category category = categoryRepository.findById(id)
-            .orElseThrow(RuntimeException::new);
+                .orElseThrow(RuntimeException::new);
 
-        category.update(dto.getName());
+        category.update(dto);
 
         categoryRepository.save(category);
 

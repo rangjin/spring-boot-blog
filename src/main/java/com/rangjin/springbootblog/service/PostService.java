@@ -31,7 +31,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 
-        post.update(dto.getTitle(), dto.getContent(), dto.getStatus());
+        post.update(dto);
 
         postRepository.save(post);
 
