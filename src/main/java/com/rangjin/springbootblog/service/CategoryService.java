@@ -29,7 +29,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 
-        category.update(dto.getName());
+        category.update(dto);
 
         categoryRepository.save(category);
 

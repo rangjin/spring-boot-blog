@@ -2,6 +2,7 @@ package com.rangjin.springbootblog.domain.post;
 
 import com.rangjin.springbootblog.domain.BaseTimeEntity;
 import com.rangjin.springbootblog.domain.category.Category;
+import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,10 +36,10 @@ public class Post extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void update(String title, String content, PostStatus status) {
-        this.title = title;
-        this.content = content;
-        this.status = status;
+    public void update(PostRequestDto dto) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+        this.status = dto.getStatus();
     }
 
 }

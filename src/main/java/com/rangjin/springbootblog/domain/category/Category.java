@@ -2,6 +2,7 @@ package com.rangjin.springbootblog.domain.category;
 
 import com.rangjin.springbootblog.domain.BaseTimeEntity;
 import com.rangjin.springbootblog.domain.post.Post;
+import com.rangjin.springbootblog.web.dto.CategoryRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,8 @@ public class Category extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void update(String name) {
-        this.name = name;
+    public void update(CategoryRequestDto dto) {
+        this.name = dto.getName();
     }
 
 }
