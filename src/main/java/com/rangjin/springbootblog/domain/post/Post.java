@@ -1,15 +1,13 @@
 package com.rangjin.springbootblog.domain.post;
 
 import com.rangjin.springbootblog.domain.BaseTimeEntity;
+import com.rangjin.springbootblog.domain.category.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -26,6 +24,9 @@ public class Post extends BaseTimeEntity {
     private String content;
 
     private PostStatus status;
+
+    @ManyToOne
+    private Category category;
 
     @Builder
     public Post(String title, String content, PostStatus status) {
