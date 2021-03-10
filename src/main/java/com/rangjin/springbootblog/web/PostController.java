@@ -1,7 +1,9 @@
 package com.rangjin.springbootblog.web;
 
+import com.rangjin.springbootblog.domain.PageRequest;
 import com.rangjin.springbootblog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +15,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("list", postService.findByStatus());
+    public String index(Model model, PageRequest pageRequest) {
+        model.addAttribute("list", postService.findByStatus(pageRequest));
 
         return "index";
     }

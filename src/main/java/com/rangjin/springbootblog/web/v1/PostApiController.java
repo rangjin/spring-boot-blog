@@ -25,11 +25,6 @@ public class PostApiController {
         return postService.findById(id);
     }
 
-    @GetMapping("/post")
-    public List<PostResponseDto> findByStatus() {
-        return postService.findByStatus();
-    }
-
     @PutMapping("/post/{id}")
     public Long update(@PathVariable("id") Long id, @RequestBody PostRequestDto dto) {
         return postService.modify(id, dto);
