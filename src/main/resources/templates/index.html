@@ -72,13 +72,16 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <div class="post-preview" th:each="post : ${list}">
-          <a th:href="@{'/post/' + *{post.getId()}}">
-            <h2 class="post-title" th:text="*{post.getTitle()}"></h2>
+          <a th:href="@{'/post/' + ${post.getId()}}">
+            <h2 class="post-title" th:text="${post.getTitle()}"></h2>
             <!-- #string.abbreviate : 글자 수 자르기 -->
             <h3 class="post-subtitle" th:text="${#strings.abbreviate(post.getContent(), 50)}"></h3>
           </a>
-          <!-- #temporals.format : LocalDateTime 출력 형식 지정 -->
-          <p class="post-meta" th:text="'Posted at ' + ${#temporals.format(post.getUpdatedAt(), 'yyyy-dd-MM HH:mm')}"></p>
+          <p class="post-meta">
+            <!-- #temporals.format : LocalDateTime 출력 형식 지정 -->
+            Posted at <strong th:text="${#temporals.format(post.getUpdatedAt(), 'yyyy-MM-dd HH:mm')}"></strong>
+            category <strong th:text="${post.categoryName}"></strong>
+          </p>
           <hr>
         </div>
 

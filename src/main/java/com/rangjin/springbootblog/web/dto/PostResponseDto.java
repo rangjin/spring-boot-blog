@@ -13,6 +13,7 @@ public class PostResponseDto {
     private final String title;
     private final String content;
     private final PostStatus status;
+    private final String categoryName;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -23,6 +24,7 @@ public class PostResponseDto {
         this.status = post.getStatus();
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
+        this.categoryName = post.getCategory().getName();
     }
 
 }
