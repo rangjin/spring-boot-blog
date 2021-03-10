@@ -2,10 +2,14 @@ package com.rangjin.springbootblog.service;
 
 import com.rangjin.springbootblog.domain.post.Post;
 import com.rangjin.springbootblog.domain.post.PostRepository;
+import com.rangjin.springbootblog.domain.post.PostStatus;
 import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import com.rangjin.springbootblog.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,13 @@ public class PostService {
 
     public PostResponseDto findById(Long id) {
         return new PostResponseDto(postRepository.findById(id).orElseThrow(RuntimeException::new));
+    }
+
+    public List<PostResponseDto> findByStatus() {
+        return postRepository.findByStatus(PostStatus.Public)
+                .stream()
+                .map(post -> new PostResponseDto(post))
+                .collect(Collectors.toList());
     }
 
     public Long modify(Long id, PostRequestDto dto) {

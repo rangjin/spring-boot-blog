@@ -6,6 +6,8 @@ import com.rangjin.springbootblog.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -21,6 +23,11 @@ public class PostApiController {
     @GetMapping("/post/{id}")
     public PostResponseDto findById(@PathVariable("id") Long id) {
         return postService.findById(id);
+    }
+
+    @GetMapping("/post")
+    public List<PostResponseDto> findByStatus() {
+        return postService.findByStatus();
     }
 
     @PutMapping("/post/{id}")
