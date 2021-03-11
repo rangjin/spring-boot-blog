@@ -84,41 +84,37 @@
           </p>
           <hr>
         </div>
+      </div>
 
-        <!-- Pager -->
-        <div class="clearfix">
-          <nav style="text-align: center;">
-            <ul class="pagination" th:with="start=${T(Math).floor(list.number / 10) * 10 + 1}, last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
-              <li>
-                <a th:href="@{/(page=1)}" aria-label="First">
-                  <span aria-hidden="true">First</span>
-                </a>
-              </li>
-
-              <li th:class="${list.first} ? 'disabled'">
-                <a th:href="${list.first} ? '#' : @{/(page=${list.number})}" aria-label="Previous">
-                  <span aria-hidden="true">&lt;</span>
-                </a>
-              </li>
-
-              <li th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == list.number + 1} ? 'active'">
-                <a th:text="${page}" th:href="@{/(page=${page})}"></a>
-              </li>
-
-              <li th:class="${list.last} ? 'disabled'">
-                <a th:href="${list.last} ? '#' : @{/(page=${list.number + 2})}" aria-label="Next">
-                  <span aria-hidden="true">&gt;</span>
-                </a>
-              </li>
-
-              <li>
-                <a th:href="@{/(page=${list.totalPages})}" aria-label="Last">
-                  <span aria-hidden="true">Last</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      <!-- Pager -->
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <nav style="margin-top: 15px;">
+          <ul class="pagination justify-content-center" th:with="start = ${T(Math).floor(list.number / 10) * 10 + 1}, last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+            <li class="page-item">
+              <a class="page-link" th:href="@{/(page = 1)}">
+                <span><<</span>
+              </a>
+            </li>
+            <li class="page-item" th:classappend="${list.first} ? 'disabled'">
+              <a class="page-link" th:href="${list.first} ? '#' : @{/(page = ${list.number})}">
+                <span><</span>
+              </a>
+            </li>
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == list.number + 1} ? 'active'">
+              <a class="page-link" th:text="${page}" th:href="@{/(page = ${page})}"></a>
+            </li>
+            <li class="page-item" th:classappend="${list.last} ? 'disabled'">
+              <a class="page-link" th:href="${list.last} ? '#' : @{/(page = ${list.number + 2})}">
+                <span>&gt;</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" th:href="@{/(page = ${list.totalPages})}">
+                <span>>></span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

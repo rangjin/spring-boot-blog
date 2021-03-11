@@ -1,31 +1,29 @@
 package com.rangjin.springbootblog.domain;
 
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.domain.Sort;
 
 @Getter
+@Setter
+@Accessors(chain = true)
 public class PageRequest {
 
     private int page;
     private int size;
     private Sort.Direction direction;
+    private String properties;
 
-    public void setPage(int page) {
-        this.page = page <= 0 ? 1 : page;
-    }
-
-    public void setSize(int size) {
-        int DEFAULT_SIZE = 10;
-        int MAX_SIZE = 50;
-        this.size = size < MAX_SIZE ? DEFAULT_SIZE : size;
-    }
-
-    public void setDirection(Sort.Direction direction) {
+    public void set(int page, int size, Sort.Direction direction, String properties) {
+        this.page = Math.max(page - 1, 0);
+        this.size = size > 50 ? 10 : size;
         this.direction = direction;
+        this.properties = properties;
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(page, 10, Sort.Direction.DESC, "title");
+        return org.springframework.data.domain.PageRequest.of(this.page, this.size, this.direction, this.properties);
     }
 
 }
