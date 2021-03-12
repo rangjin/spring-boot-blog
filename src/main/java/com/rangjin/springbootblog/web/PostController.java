@@ -28,4 +28,9 @@ public class PostController {
         return "post";
     }
 
+    @GetMapping("/create")
+    public String newPost(Model model) {
+        return "newPost";
+    }
+
 }
