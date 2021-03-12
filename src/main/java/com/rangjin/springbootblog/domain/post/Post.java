@@ -30,10 +30,11 @@ public class Post extends BaseTimeEntity {
     private Category category;
 
     @Builder
-    public Post(String title, String content, PostStatus status) {
+    public Post(String title, String content, PostStatus status, Category category) {
         this.title = title;
         this.content = content;
         this.status = status;
+        this.category = category;
     }
 
     public void update(PostRequestDto dto) {

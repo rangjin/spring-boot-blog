@@ -10,6 +10,15 @@
 
   <title>Clean Blog - Start Bootstrap Theme</title>
 
+  <link rel="stylesheet" th:href="@{/lib/material-icons.css}">
+  <link rel="stylesheet" th:href="@{/lib/base16-light.css}">
+  <link rel="stylesheet" th:href="@{/codemirror/lib/codemirror.css}">
+  <link rel="stylesheet" th:href="@{/lib/lib/default.css}">
+  <link rel="stylesheet" th:href="@{/lib/github-markdown.css}">
+  <link rel="stylesheet" th:href="@{/lib/spell-checker.min.css}">
+  <link rel="stylesheet" th:href="@{/lib/sweetalert.css}">
+  <link rel="stylesheet" th:href="@{/css/post.css}">
+
   <!-- Bootstrap core CSS -->
   <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -57,7 +66,7 @@
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="col-lg-10 col-md-10 mx-auto">
           <div class="post-heading">
             <h1 th:text="${post.title}"></h1>
             <span class="meta">
@@ -76,7 +85,8 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1" th:utext="${post.content}"></div>
+          <div id="in" style="display: none;"><textarea id="code" name="content" th:utext="${post.content}" readonly></textarea></div>
+          <div id="out" style="margin-bottom: 20px;" class="markdown-body"></div>
         </div>
       </div>
     </div>
@@ -120,6 +130,26 @@
       </div>
     </div>
   </footer>
+
+
+  <script th:src="@{/lib/markdown-it.js}"></script>
+  <script th:src="@{/lib/markdown-it-footnote.js}"></script>
+  <script th:src="@{/lib/highlight.pack.js}"></script>
+  <script th:src="@{/lib/emojify.js}"></script>
+  <script th:src="@{/codemirror/lib/codemirror.js}"></script>
+  <script th:src="@{/codemirror/overlay.js}"></script>
+  <script th:src="@{/codemirror/xml/xml.js}"></script>
+  <script th:src="@{/codemirror/markdown/markdown.js}"></script>
+  <script th:src="@{/codemirror/gfm/gfm.js}"></script>
+  <script th:src="@{/codemirror/javascript/javascript.js}"></script>
+  <script th:src="@{/codemirror/css/css.js}"></script>
+  <script th:src="@{/codemirror/htmlmixed/htmlmixed.js}"></script>
+  <script th:src="@{/codemirror/lib/util/continuelist.js}"></script>
+  <script th:src="@{/lib/spell-checker.min.js}"></script>
+  <script th:src="@{/lib/rawinflate.js}"></script>
+  <script th:src="@{/lib/rawdeflate.js}"></script>
+  <script th:src="@{/lib/sweetalert.min.js}"></script>
+  <script th:src="@{/js/post.js}"></script>
 
   <!-- Bootstrap core JavaScript -->
   <script src="/vendor/jquery/jquery.min.js"></script>

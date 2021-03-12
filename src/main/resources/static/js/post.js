@@ -118,6 +118,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
     }
 });
 
+update(editor);
 editor.on('change', update);
 
 function selectionChanger(selection,operator,endoperator){

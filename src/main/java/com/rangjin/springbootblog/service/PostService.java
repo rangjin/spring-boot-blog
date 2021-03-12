@@ -1,6 +1,7 @@
 package com.rangjin.springbootblog.service;
 
 import com.rangjin.springbootblog.domain.PageRequest;
+import com.rangjin.springbootblog.domain.category.CategoryRepository;
 import com.rangjin.springbootblog.domain.post.Post;
 import com.rangjin.springbootblog.domain.post.PostRepository;
 import com.rangjin.springbootblog.domain.post.PostStatus;
@@ -20,12 +21,14 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
 
     public Long create(PostRequestDto dto) {
         Post post = Post.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .status(dto.getStatus())
+                .category(categoryRepository.findById(dto.getCategoryId()).orElse(null))
                 .build();
 
         return postRepository.save(post).getId();
