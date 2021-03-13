@@ -2,11 +2,15 @@ package com.rangjin.springbootblog.web.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CategoryRequestDto {
 
-    private final String name;
+    private String name;
 
     @Builder
     public CategoryRequestDto(String name) {

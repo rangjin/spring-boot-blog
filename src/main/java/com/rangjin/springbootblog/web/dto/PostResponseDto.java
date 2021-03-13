@@ -3,19 +3,23 @@ package com.rangjin.springbootblog.web.dto;
 import com.rangjin.springbootblog.domain.post.Post;
 import com.rangjin.springbootblog.domain.post.PostStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class PostResponseDto {
 
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final PostStatus status;
-    private final String categoryName;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private Long id;
+    private String title;
+    private String content;
+    private PostStatus status;
+    private String categoryName;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();

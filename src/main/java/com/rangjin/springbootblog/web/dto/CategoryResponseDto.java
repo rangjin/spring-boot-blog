@@ -2,16 +2,20 @@ package com.rangjin.springbootblog.web.dto;
 
 import com.rangjin.springbootblog.domain.category.Category;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class CategoryResponseDto {
 
-    private final Long id;
-    private final String name;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private Long id;
+    private String name;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public CategoryResponseDto(Category category) {
         this.id = category.getId();
