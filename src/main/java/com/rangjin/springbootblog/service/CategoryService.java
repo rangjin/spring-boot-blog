@@ -7,6 +7,9 @@ import com.rangjin.springbootblog.web.dto.CategoryResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -23,6 +26,12 @@ public class CategoryService {
 
     public CategoryResponseDto findById(Long id) {
         return new CategoryResponseDto(categoryRepository.findById(id).orElseThrow(RuntimeException::new));
+    }
+
+    public List<CategoryResponseDto> findAll() {
+        return categoryRepository.findAll().stream()
+            .map(CategoryResponseDto::new)
+            .collect(Collectors.toList());
     }
 
     public Long modify(Long id, CategoryRequestDto dto) {

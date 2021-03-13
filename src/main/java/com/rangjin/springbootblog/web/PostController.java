@@ -1,7 +1,9 @@
 package com.rangjin.springbootblog.web;
 
 import com.rangjin.springbootblog.domain.PageRequest;
+import com.rangjin.springbootblog.service.CategoryService;
 import com.rangjin.springbootblog.service.PostService;
+import com.rangjin.springbootblog.web.dto.CategoryResponseDto;
 import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,11 +13,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
+    private final CategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public List<CategoryResponseDto> categories() {
+        return categoryService.findAll();
+    }
 
     @GetMapping("/")
     public String index(Model model, PageRequest pageRequest) {

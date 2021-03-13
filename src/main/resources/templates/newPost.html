@@ -83,8 +83,23 @@
                     <label for="title" class="col-lg-2 control-label">Title</label>
                     <input type="text" class="form-control" id="title" name="title" placeholder="Title"/>
                 </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">categories</label>
+                    <div class="btn-group" data-toggle="buttons" th:each="category : ${categories}">
+                        <label class="btn btn-primary active">
+                            <input th:onclick="changeCategory([[${category.name}]])" name="categoryId" type="radio" th:text="${category.name}" th:value="${category.id}" />
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="categoryName" class="col-lg-2 control-label">category</label>
+                    <div class="col-lg-10">
+                        <input type="text" class="form-control" id="categoryName" disabled="disabled"/>
+                    </div>
+                </div>
+
                 <input type="hidden" name="status" id="status" value="Public">
-                <input type="hidden" name="categoryId" id="categoryId" value="1">
+
                 <div class="form-group grid">
                     <div id="in"><textarea id="code" name="content"># New Document</textarea></div>
                     <div id="out" class="markdown-body"></div>
