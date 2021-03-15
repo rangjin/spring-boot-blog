@@ -2261,15 +2261,16 @@
     var display = cm.display, doc = cm.doc;
     var fragment = document.createDocumentFragment();
     var padding = paddingH(cm.display), leftSide = padding.left;
-    var rightSide = Math.max(display.sizerWidth, displayWidth(cm) - display.sizer.offsetLeft) - padding.right;
+    var rightSide = Math.max(display.sizerWidth, displayWidth(cm) - display.sizer.offsetLeft) - padding.right - display.sizer.offsetLeft;
 
     function add(left, top, width, bottom) {
       if (top < 0) top = 0;
       top = Math.round(top);
       bottom = Math.round(bottom);
       fragment.appendChild(elt("div", null, "CodeMirror-selected", "position: absolute; left: " + left +
-                               "px; top: " + top + "px; width: 98%; height: " + (bottom - top) + "px"));
-    }
+          "px; top: " + top + "px; width: " + (width == null ? rightSide - left: width) +
+          "px; height: " + (bottom - top) + "px"));
+    } 
 
     function drawForLine(line, fromArg, toArg) {
       var lineObj = getLine(doc, line);
