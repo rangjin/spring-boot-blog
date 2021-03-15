@@ -80,7 +80,8 @@
           <p class="post-meta">
             <!-- #temporals.format : LocalDateTime 출력 형식 지정 -->
             Posted at <strong th:text="${#temporals.format(post.getUpdatedAt(), 'yyyy-MM-dd HH:mm')}"></strong>
-            category <strong th:text="${post.getCategoryName()}"></strong>
+            <br>
+            Category <strong th:text="${post.getCategoryName()}"></strong>
           </p>
           <hr>
         </div>

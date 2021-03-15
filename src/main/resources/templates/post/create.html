@@ -78,34 +78,51 @@
 <!-- Post Content -->
 <div class="container">
     <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto">
-            <form th:action="@{/create}" th:object="${dto}" class="form-horizontal" method="post">
+        <div class="col-lg-10 col-md-10 mx-auto" style="border: 1px gray solid;">
+            <form th:action="@{/create}" th:object="${dto}" class="form-horizontal" style="margin-top: 15px;" method="post">
                 <div class="form-group">
-                    <label for="title" class="col-lg-2 control-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="Title"/>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-2 control-label">categories</label>
-                    <div class="btn-group" data-toggle="buttons" th:each="category : ${categories}">
-                        <label class="btn btn-primary active">
-                            <input th:onclick="changeCategory([[${category.name}]])" name="categoryId" type="radio" th:text="${category.name}" th:value="${category.id}" />
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="categoryName" class="col-lg-2 control-label">category</label>
+                    <label class="col-lg-2 control-label" for="title">Title</label>
                     <div class="col-lg-10">
-                        <input type="text" class="form-control" id="categoryName" disabled="disabled"/>
+                        <input type="text" class="form-control" id="title" name="title"
+                               th:placeholder="${#fields.hasErrors('title') ? #fields.errors('title').get(0) : 'Title'}"
+                               th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
+                               th:value="${dto.getTitle()}"/>
                     </div>
                 </div>
 
-                <input type="hidden" name="status" id="status" value="Public">
-
-                <div class="form-group grid">
-                    <div id="in"><textarea id="code" name="content"># New Document</textarea></div>
-                    <div id="out" class="markdown-body"></div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">category</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" name="categoryId">
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.getId()}"
+                                    th:utext="${category.getName()}"></option>
+                        </select>
+                    </div>
                 </div>
-                <input class="btn btn-primary" type="submit" value="Submit">
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">status</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" name="status">
+                            <option>Public</option>
+                            <option>Private</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">content</label>
+                    <div class="grid">
+                        <div id="in"><textarea id="code" name="content" th:text="${dto.getContent() == null ? '# New Document' : dto.getContent()}"></textarea></div>
+                        <div id="out" class="markdown-body"></div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="float: right;">
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
+
             </form>
         </div>
     </div>
@@ -175,6 +192,10 @@
 
 <!-- Custom scripts for this template -->
 <script src="/js/clean-blog.min.js"></script>
+
+<script>
+    $('.selectpicker').selectpicker();
+</script>
 
 </body>
 
