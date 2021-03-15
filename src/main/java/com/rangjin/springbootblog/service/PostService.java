@@ -39,7 +39,7 @@ public class PostService {
     }
 
     public Page<PostResponseDto> findByStatus(PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 2, Sort.Direction.DESC, "title");
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
 
         return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
     }

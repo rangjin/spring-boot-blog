@@ -35,20 +35,20 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public String postDetail(Model model, @PathVariable("id") Long id) {
+    public String detail(Model model, @PathVariable("id") Long id) {
         model.addAttribute("post", postService.findById(id));
 
-        return "post";
+        return "post/detail";
     }
 
     @GetMapping("/create")
-    public String newPost(Model model) {
+    public String create(Model model) {
         model.addAttribute("dto", new PostRequestDto());
-        return "newPost";
+        return "post/create";
     }
 
     @PostMapping("/create")
-    public String newPost(@ModelAttribute("dto")PostRequestDto dto, Model model) {
+    public String create(@ModelAttribute("dto")PostRequestDto dto, Model model) {
         return "redirect:/post/" + postService.create(dto);
     }
 
