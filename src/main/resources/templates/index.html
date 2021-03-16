@@ -72,7 +72,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto" style="margin-bottom: 50px;">
         <div class="post-preview" th:each="post : ${list}">
-          <a th:href="@{'/post/' + ${post.getId()}}">
+          <a th:href="@{'/post/detail/' + ${post.getId()}}">
             <h2 class="post-title" th:text="${post.getTitle()}"></h2>
             <!-- #string.abbreviate : 글자 수 자르기 -->
             <h3 class="post-subtitle" th:text="${#strings.abbreviate(post.getContent(), 50)}"></h3>

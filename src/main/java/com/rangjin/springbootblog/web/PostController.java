@@ -1,7 +1,7 @@
 package com.rangjin.springbootblog.web;
 
 import com.rangjin.springbootblog.domain.PageRequest;
-import com.rangjin.springbootblog.domain.validator.CreatePostValidator;
+import com.rangjin.springbootblog.domain.validator.PostValidator;
 import com.rangjin.springbootblog.service.CategoryService;
 import com.rangjin.springbootblog.service.PostService;
 import com.rangjin.springbootblog.web.dto.CategoryResponseDto;
@@ -9,7 +9,6 @@ import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,20 +36,20 @@ public class PostController {
         return "index";
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
         model.addAttribute("post", postService.findById(id));
 
         return "post/detail";
     }
 
-    @GetMapping("/create")
+    @GetMapping("post/create")
     public String create(Model model) {
         model.addAttribute("dto", new PostRequestDto());
         return "post/create";
     }
 
-    @PostMapping("/create")
+    @PostMapping("post/create")
     public String create(@ModelAttribute("dto") PostRequestDto dto, Errors errors, Model model) {
         new CreatePostValidator().validate(dto, errors);
 
@@ -60,7 +59,7 @@ public class PostController {
             return "post/create";
         }
 
-        return "redirect:/post/" + postService.create(dto);
+        return "redirect:/post/detail/" + postService.create(dto);
     }
 
 }
