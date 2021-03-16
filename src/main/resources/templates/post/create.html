@@ -78,23 +78,26 @@
 <!-- Post Content -->
 <div class="container">
     <div class="row">
-        <div class="col-lg-10 col-md-10 mx-auto" style="border: 1px gray solid;">
-            <form th:action="@{/create}" th:object="${dto}" class="form-horizontal" style="margin-top: 15px;" method="post">
+        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; margin-bottom: 50px">
+            <form th:action="@{/create}" th:object="${dto}" class="form form-horizontal" method="post">
                 <div class="form-group">
                     <label class="col-lg-2 control-label" for="title">Title</label>
-                    <div class="col-lg-10">
+                    <div class="col-lg-12">
                         <input type="text" class="form-control" id="title" name="title"
-                               th:placeholder="${#fields.hasErrors('title') ? #fields.errors('title').get(0) : 'Title'}"
+                               th:placeholder="${#fields.hasErrors('title') ? #fields.errors('title').get(0) : '게시글 제목'}"
                                th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'"
                                th:value="${dto.getTitle()}"/>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">category</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="categoryId">
+                    <label class="col-lg-2 control-label">Category</label>
+                    <div class="col-lg-6">
+                        <select class="form-control" th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid'" name="categoryId">
+                            <option th:utext="${#fields.hasErrors('categoryId')} ? ${#fields.errors('categoryId').get(0)} : '게시글 카테고리'"
+                                    th:value="${null}"></option>
                             <option th:each="category : ${categories}"
+                                    th:selected="${dto.getCategoryId() == category.getId()} ? 'selected'"
                                     th:value="${category.getId()}"
                                     th:utext="${category.getName()}"></option>
                         </select>
@@ -102,17 +105,19 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">status</label>
-                    <div class="col-lg-10">
-                        <select class="form-control" name="status">
-                            <option>Public</option>
-                            <option>Private</option>
+                    <label class="col-lg-2 control-label">Status</label>
+                    <div class="col-lg-6">
+                        <select class="form-control" th:classappend="${#fields.hasErrors('status')} ? 'is-invalid'" name="status">
+                            <option th:utext="${#fields.hasErrors('status') ? #fields.errors('status').get(0) : '게시글 공개 여부'}"
+                                    th:value="${null}" disabled selected></option>
+                            <option th:selected="${dto.getStatus() != null && dto.getStatus().name() == 'Public'} ? 'selected'">Public</option>
+                            <option th:selected="${dto.getStatus() != null && dto.getStatus().name() == 'Private'} ? 'selected'">Private</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">content</label>
+                    <label class="col-lg-2 control-label">Content</label>
                     <div class="grid">
                         <div id="in"><textarea id="code" name="content" th:text="${dto.getContent() == null ? '# New Document' : dto.getContent()}"></textarea></div>
                         <div id="out" class="markdown-body"></div>
@@ -192,10 +197,6 @@
 
 <!-- Custom scripts for this template -->
 <script src="/js/clean-blog.min.js"></script>
-
-<script>
-    $('.selectpicker').selectpicker();
-</script>
 
 </body>
 

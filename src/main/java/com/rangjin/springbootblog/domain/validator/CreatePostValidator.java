@@ -20,7 +20,7 @@ public class CreatePostValidator implements Validator {
         }
 
         if (dto.getCategoryId() == null) {
-            errors.rejectValue("categoryId", "required", "카테고리를 입력해주세요");
+            errors.rejectValue("categoryId", "required", "카테고리를 선택해주세요");
         }
 
         if (dto.getStatus() == null) {

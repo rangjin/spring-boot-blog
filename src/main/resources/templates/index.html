@@ -70,7 +70,7 @@
   <!-- Main Content -->
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
+      <div class="col-lg-8 col-md-10 mx-auto" style="margin-bottom: 50px;">
         <div class="post-preview" th:each="post : ${list}">
           <a th:href="@{'/post/' + ${post.getId()}}">
             <h2 class="post-title" th:text="${post.getTitle()}"></h2>
@@ -85,37 +85,37 @@
           </p>
           <hr>
         </div>
-      </div>
 
-      <!-- Pager -->
-      <div class="col-lg-8 col-md-10 mx-auto">
-        <nav style="margin-top: 15px;">
-          <ul class="pagination justify-content-center" th:with="start = ${T(Math).floor(list.number / 10) * 10 + 1}, last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
-            <li class="page-item">
-              <a class="page-link" th:href="@{/(page = 1)}">
-                <span><<</span>
-              </a>
-            </li>
-            <li class="page-item" th:classappend="${list.first} ? 'disabled'">
-              <a class="page-link" th:href="${list.first} ? '#' : @{/(page = ${list.number})}">
-                <span><</span>
-              </a>
-            </li>
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == list.number + 1} ? 'active'">
-              <a class="page-link" th:text="${page}" th:href="@{/(page = ${page})}"></a>
-            </li>
-            <li class="page-item" th:classappend="${list.last} ? 'disabled'">
-              <a class="page-link" th:href="${list.last} ? '#' : @{/(page = ${list.number + 2})}">
-                <span>&gt;</span>
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" th:href="@{/(page = ${list.totalPages})}">
-                <span>>></span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <!-- Pager -->
+        <div>
+          <nav style="margin-top: 15px;">
+            <ul class="pagination justify-content-center" th:with="start = ${T(Math).floor(list.number / 10) * 10 + 1}, last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+              <li class="page-item">
+                <a class="page-link" th:href="@{/(page = 1)}">
+                  <span><<</span>
+                </a>
+              </li>
+              <li class="page-item" th:classappend="${list.first} ? 'disabled'">
+                <a class="page-link" th:href="${list.first} ? '#' : @{/(page = ${list.number})}">
+                  <span><</span>
+                </a>
+              </li>
+              <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == list.number + 1} ? 'active'">
+                <a class="page-link" th:text="${page}" th:href="@{/(page = ${page})}"></a>
+              </li>
+              <li class="page-item" th:classappend="${list.last} ? 'disabled'">
+                <a class="page-link" th:href="${list.last} ? '#' : @{/(page = ${list.number + 2})}">
+                  <span>&gt;</span>
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" th:href="@{/(page = ${list.totalPages})}">
+                  <span>>></span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
   </div>
