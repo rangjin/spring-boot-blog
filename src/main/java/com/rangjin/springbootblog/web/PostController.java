@@ -51,7 +51,7 @@ public class PostController {
 
     @PostMapping("post/create")
     public String create(@ModelAttribute("dto") PostRequestDto dto, Errors errors, Model model) {
-        new CreatePostValidator().validate(dto, errors);
+        new PostValidator().validate(dto, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute("dto", dto);
@@ -60,6 +60,28 @@ public class PostController {
         }
 
         return "redirect:/post/detail/" + postService.create(dto);
+    }
+
+    @GetMapping("post/edit/{id}")
+    public String modify(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("dto", new PostRequestDto());
+        model.addAttribute("post", postService.findById(id));
+
+        return "post/edit";
+    }
+
+    @PostMapping("post/edit/{id}")
+    public String modify(@PathVariable("id") Long id, @ModelAttribute("dto") PostRequestDto dto, Errors errors, Model model) {
+        new PostValidator().validate(dto, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute("post", postService.findById(id));
+            model.addAttribute("dto", dto);
+
+            return "post/edit";
+        }
+
+        return "redirect:/post/detail/" + postService.modify(id, dto);
     }
 
 }

@@ -37,10 +37,11 @@ public class Post extends BaseTimeEntity {
         this.category = category;
     }
 
-    public void update(PostRequestDto dto) {
+    public void update(PostRequestDto dto, Category category) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
         this.status = dto.getStatus();
+        this.category = category;
     }
 
 }

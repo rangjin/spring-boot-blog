@@ -4,7 +4,7 @@ import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class CreatePostValidator implements Validator {
+public class PostValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {

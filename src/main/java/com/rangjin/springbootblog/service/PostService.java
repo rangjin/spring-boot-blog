@@ -1,6 +1,7 @@
 package com.rangjin.springbootblog.service;
 
 import com.rangjin.springbootblog.domain.PageRequest;
+import com.rangjin.springbootblog.domain.category.Category;
 import com.rangjin.springbootblog.domain.category.CategoryRepository;
 import com.rangjin.springbootblog.domain.post.Post;
 import com.rangjin.springbootblog.domain.post.PostRepository;
@@ -45,10 +46,10 @@ public class PostService {
     }
 
     public Long modify(Long id, PostRequestDto dto) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
+        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(RuntimeException::new);
 
-        post.update(dto);
+        post.update(dto, category);
 
         postRepository.save(post);
 
