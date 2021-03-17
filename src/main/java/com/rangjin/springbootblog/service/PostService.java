@@ -47,6 +47,13 @@ public class PostService {
         return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
     }
 
+    public Page<PostResponseDto> findByStatusAndCategory(Long id, PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of()).map(PostResponseDto::new);
+    }
+
     public Page<PostResponseDto> findByStatusForAdmin(PageRequest pageRequest) {
         pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
 

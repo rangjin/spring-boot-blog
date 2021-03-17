@@ -14,12 +14,14 @@ public class CategoryResponseDto {
 
     private Long id;
     private String name;
+    private int postCnt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public CategoryResponseDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
+        this.postCnt = category.getPostList().size();
         this.createdAt = category.getCreatedAt();
         this.updatedAt = category.getUpdatedAt();
     }

@@ -36,6 +36,14 @@ public class PostController {
         return "index";
     }
 
+    @GetMapping("/post/category/{id}")
+    public String category(@PathVariable("id") Long id, PageRequest pageRequest, Model model) {
+        model.addAttribute("category", categoryService.findById(id));
+        model.addAttribute("list", postService.findByStatusAndCategory(id, pageRequest));
+
+        return "post/category";
+    }
+
     @GetMapping("/post/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
         model.addAttribute("post", postService.findById(id));

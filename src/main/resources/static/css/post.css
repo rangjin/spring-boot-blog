@@ -12,6 +12,10 @@
      font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
  }
 
+ .category {
+     font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+ }
+
  .grid {
      display: grid;
      grid-template-columns: 1fr 1fr;
