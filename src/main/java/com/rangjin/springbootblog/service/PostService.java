@@ -10,12 +10,8 @@ import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import com.rangjin.springbootblog.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +32,25 @@ public class PostService {
     }
 
     public PostResponseDto findById(Long id) {
-        return new PostResponseDto(postRepository.findById(id).orElseThrow(RuntimeException::new));
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        if (post.getStatus() == PostStatus.Delete) {
+            throw new RuntimeException();
+        }
+
+        return new PostResponseDto(post);
     }
 
     public Page<PostResponseDto> findByStatus(PageRequest pageRequest) {
         pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
 
         return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
+    }
+
+    public Page<PostResponseDto> findByStatusForAdmin(PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+
+        return postRepository.findByStatusNotContains(PostStatus.Delete, pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Long modify(Long id, PostRequestDto dto) {
@@ -56,10 +64,12 @@ public class PostService {
         return post.getId();
     }
 
-    public Long delete(Long id) {
-        postRepository.deleteById(id);
+    public void delete(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
 
-        return id;
+        post.delete();
+
+        postRepository.save(post);
     }
 
 }

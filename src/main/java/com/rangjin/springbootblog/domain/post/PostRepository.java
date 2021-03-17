@@ -10,4 +10,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByStatus(PostStatus status, Pageable pageable);
 
+    Page<Post> findByStatusNotContains(PostStatus status, Pageable pageable);
+
 }

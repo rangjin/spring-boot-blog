@@ -44,4 +44,8 @@ public class Post extends BaseTimeEntity {
         this.category = category;
     }
 
+    public void delete() {
+        this.status = PostStatus.Delete;
+    }
+
 }

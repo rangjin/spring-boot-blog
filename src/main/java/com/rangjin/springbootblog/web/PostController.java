@@ -84,4 +84,11 @@ public class PostController {
         return "redirect:/post/detail/" + postService.modify(id, dto);
     }
 
+    @GetMapping("post/delete/{id}")
+    public String delete(@PathVariable("id") Long id, Model model) {
+        postService.delete(id);
+
+        return "redirect:/";
+    }
+
 }
