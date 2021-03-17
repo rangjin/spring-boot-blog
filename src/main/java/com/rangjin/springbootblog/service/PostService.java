@@ -34,10 +34,6 @@ public class PostService {
     public PostResponseDto findById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
 
-        if (post.getStatus() == PostStatus.Delete) {
-            throw new RuntimeException();
-        }
-
         return new PostResponseDto(post);
     }
 
@@ -57,7 +53,7 @@ public class PostService {
     public Page<PostResponseDto> findByStatusForAdmin(PageRequest pageRequest) {
         pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
 
-        return postRepository.findByStatusNotContains(PostStatus.Delete, pageRequest.of()).map(PostResponseDto::new);
+        return postRepository.findAll(pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Long modify(Long id, PostRequestDto dto) {
@@ -72,11 +68,7 @@ public class PostService {
     }
 
     public void delete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
-
-        post.delete();
-
-        postRepository.save(post);
+        postRepository.deleteById(id);
     }
 
 }

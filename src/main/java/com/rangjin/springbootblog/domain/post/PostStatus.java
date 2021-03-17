@@ -8,8 +8,7 @@ import lombok.Getter;
 public enum PostStatus {
 
     Public("공개"),
-    Private("비공개"),
-    Delete("삭제");
+    Private("비공개");
 
     private final String value;
 
