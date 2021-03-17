@@ -23,6 +23,28 @@ public class CategoryController {
         return "category/table";
     }
 
+    @GetMapping("/create")
+    public String create(Model model) {
+        model.addAttribute("dto", new CategoryRequestDto());
+
+        return "category/create";
+    }
+
+    @PostMapping("/create")
+    public String create(@ModelAttribute("dto") CategoryRequestDto dto, Errors errors, Model model) {
+        new CategoryValidator().validate(dto, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute("dto", dto);
+
+            return "category/edit";
+        }
+
+        categoryService.create(dto);
+
+        return "redirect:/category";
+    }
+
     @GetMapping("/edit/{id}")
     public String modify(@PathVariable("id") Long id, Model model) {
         model.addAttribute("category", categoryService.findById(id));
@@ -43,6 +65,13 @@ public class CategoryController {
         }
 
         categoryService.modify(id, dto);
+
+        return "redirect:/category";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id, Model model) {
+        categoryService.delete(id);
 
         return "redirect:/category";
     }

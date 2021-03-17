@@ -67,51 +67,37 @@
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-10 col-md-10 mx-auto">
-                <div class="site-heading">
-                    <h1>Categories</h1>
-                    <span class="subheading">Categories of My Blog</span>
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="post-heading">
                 </div>
-            </div>
             </div>
         </div>
     </div>
 </header>
 
 <!-- Post Content -->
-<article>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-md-10 mx-auto">
-                <div style="float: right;">
-                    <a th:href="@{/category/create}" class="btn-sm btn-primary">Create</a>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; margin-bottom: 50px">
+            <form th:action="@{/category/create}" th:object="${dto}" class="form form-horizontal" method="post">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="name">Name</label>
+                    <div class="col-lg-12">
+                        <input type="text" class="form-control" id="name" name="name"
+                               th:placeholder="${#fields.hasErrors('name') ? #fields.errors('name').get(0) : '카테고리 이름'}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                               th:value="${dto.getName()}"/>
+                    </div>
                 </div>
-                <div style="margin-top: 40px;">
-                    <table class="category table table-hover" style="margin-bottom: 50px;">
-                        <thead>
-                        <tr>
-                            <td>#</td>
-                            <td>이름</td>
-                            <td>게시물 갯수</td>
-                            <td>수정</td>
-                            <td>삭제</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:with="start = 0" th:each="category : ${categories}">
-                            <td th:text="${categoryStat.index + 1}"></td>
-                            <td th:text="${category.getName()}"  th:onclick="location.href = 'http://' + location.host + '/post/category/' + [[${category.getId()}]]"></td>
-                            <td th:text="${category.getPostCnt()}"></td>
-                            <td><a th:href="@{/category/edit/{id}(id = ${category.getId()})}" class="btn-sm btn-primary">Edit</a></td>
-                            <td><a th:onclick="deleteConfirm([[${category.getId()}]])" class="btn-sm btn-primary">Delete</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
+
+                <div class="form-group" style="float: right;">
+                    <input class="btn btn-primary" type="submit" value="Submit">
                 </div>
-            </div>
+
+            </form>
         </div>
     </div>
-</article>
+</div>
 
 <hr>
 
@@ -152,7 +138,6 @@
     </div>
 </footer>
 
-
 <script th:src="@{/lib/markdown-it.js}"></script>
 <script th:src="@{/lib/markdown-it-footnote.js}"></script>
 <script th:src="@{/lib/highlight.pack.js}"></script>
@@ -178,17 +163,6 @@
 
 <!-- Custom scripts for this template -->
 <script src="/js/clean-blog.min.js"></script>
-
-<script>
-    function deleteConfirm(id) {
-        var result = confirm("해당 카테고리와 게시물들을 전부 삭제하시겠습니까?");
-
-        if (result) {
-            alert('카테고리와 게시물들이 전부 삭제되었습니다');
-            location.href = 'http://' + location.host + '/category/delete/' + id;
-        }
-    }
-</script>
 
 </body>
 
