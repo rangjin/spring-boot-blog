@@ -15,10 +15,6 @@ public class RegisterAdminValidator implements Validator {
     public void validate(Object target, Errors errors) {
         AdminRequestDto dto = (AdminRequestDto) target;
 
-        System.out.println(dto.getUsername());
-        System.out.println(dto.getPassword());
-        System.out.println(dto.getRePassword());
-
         if (dto.getUsername().equals("")) {
             errors.rejectValue("username", "required", "아이디를 입력하세요");
         }

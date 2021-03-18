@@ -59,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 인가를 처리하는 url
                 // .loginProcessingUrl("/user/authenticate")
                 // 로그인 성공 시 이동 페이지(컨트롤러 매핑 필요)
-                .defaultSuccessUrl("/admin/login/result")
+                .defaultSuccessUrl("/")
                 // 로그인 실패 시 이동 페이지(컨트롤러 매핑 필요)
                 // .failureUrl("/admin/login?error=true")
                 // 로그인 실패 헨들러

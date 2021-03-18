@@ -7,6 +7,9 @@ import com.rangjin.springbootblog.service.PostService;
 import com.rangjin.springbootblog.web.dto.CategoryResponseDto;
 import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -47,6 +50,12 @@ public class PostController {
     @GetMapping("/post/detail/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
         model.addAttribute("post", postService.findById(id));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth.isAuthenticated()) {
+            model.addAttribute("username", auth.getName());
+        }
 
         return "post/detail";
     }

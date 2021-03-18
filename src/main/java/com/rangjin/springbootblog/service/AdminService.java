@@ -5,6 +5,7 @@ import com.rangjin.springbootblog.domain.admin.AdminRepository;
 import com.rangjin.springbootblog.web.dto.AdminRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,6 +38,8 @@ public class AdminService implements UserDetailsService {
         Admin admin = adminRepository.findByUsername(username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         return new User(admin.getUsername(), admin.getPassword(), authorities);
     }
