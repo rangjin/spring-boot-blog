@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -82,19 +82,19 @@
 <article>
     <div class="container">
         <div class="row">
-            <div class="col-lg-10 col-md-10 mx-auto">
-                <div style="float: right;">
+            <div class="category col-lg-10 col-md-10 mx-auto">
+                <div sec:authorize="isAuthenticated()" style="float: right; margin-bottom: 20px;">
                     <a th:href="@{/category/create}" class="btn-sm btn-primary">Create</a>
                 </div>
-                <div style="margin-top: 40px;">
-                    <table class="category table table-hover" style="margin-bottom: 50px;">
+                <div>
+                    <table class="table table-hover" style="margin-bottom: 50px;">
                         <thead>
                         <tr>
                             <td>#</td>
                             <td>이름</td>
                             <td>게시물 갯수</td>
-                            <td>수정</td>
-                            <td>삭제</td>
+                            <td sec:authorize="isAuthenticated()">수정</td>
+                            <td sec:authorize="isAuthenticated()">삭제</td>
                         </tr>
                         </thead>
                         <tbody>
@@ -102,8 +102,8 @@
                             <td th:text="${categoryStat.index + 1}"></td>
                             <td th:text="${category.getName()}"  th:onclick="location.href = 'http://' + location.host + '/post/category/' + [[${category.getId()}]]"></td>
                             <td th:text="${category.getPostCnt()}"></td>
-                            <td><a th:href="@{/category/edit/{id}(id = ${category.getId()})}" class="btn-sm btn-primary">Edit</a></td>
-                            <td><a th:onclick="deleteConfirm([[${category.getId()}]])" class="btn-sm btn-primary">Delete</a></td>
+                            <td sec:authorize="isAuthenticated()"><a th:href="@{/category/edit/{id}(id = ${category.getId()})}" class="btn-sm btn-primary">Edit</a></td>
+                            <td sec:authorize="isAuthenticated()"><a th:onclick="deleteConfirm([[${category.getId()}]])" class="btn-sm btn-primary">Delete</a></td>
                         </tr>
                         </tbody>
                     </table>

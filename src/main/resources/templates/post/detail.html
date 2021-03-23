@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -86,7 +86,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-10 col-md-10 mx-auto" style="margin-bottom: 50px;">
-          <div style="float: right;">
+          <div sec:authorize="isAuthenticated()" style="float: right;">
             <a th:href="@{../../post/edit/{id}(id = ${post.getId()})}" class="btn-sm btn-primary">Edit</a>
             <a th:onclick="deleteConfirm([[${post.getId()}]])" class="btn-sm btn-primary">Delete</a>
           </div>
