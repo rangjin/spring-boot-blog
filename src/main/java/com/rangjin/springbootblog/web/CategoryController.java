@@ -20,7 +20,7 @@ public class CategoryController {
     public String categories(Model model) {
         model.addAttribute("categories", categoryService.findAll());
 
-        return "category/table";
+        return "category/list";
     }
 
     @GetMapping("/create")
