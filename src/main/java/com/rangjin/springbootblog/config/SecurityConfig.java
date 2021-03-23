@@ -1,6 +1,7 @@
 package com.rangjin.springbootblog.config;
 
 import com.rangjin.springbootblog.service.AdminService;
+import com.rangjin.springbootblog.service.LoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -23,6 +25,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler failureHandler() {
+        return new LoginFailureHandler();
     }
 
     @Override
@@ -47,10 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/post/create", "/post/edit/**", "/post/delete/**").hasRole("ADMIN")
                 .antMatchers("/category/create", "/category/edit/**", "/category/delete/**").hasRole("ADMIN")
                 // 모든 경로에 대해 권한없이 접근 가능
-                .antMatchers("/**")
+                .antMatchers("/**").permitAll();
                 // 모든 요청에 대해, 인증된 사용자만 접근하도록 설정
                 // .anyRequest().authenticated()
-                .permitAll();
 
         // 로그인 설정
         http.formLogin()
@@ -61,9 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그인 성공 시 이동 페이지(컨트롤러 매핑 필요)
                 .defaultSuccessUrl("/")
                 // 로그인 실패 시 이동 페이지(컨트롤러 매핑 필요)
-                // .failureUrl("/admin/login?error=true")
+                .failureUrl("/admin/login?error=true")
                 // 로그인 실패 헨들러
-                // .failureHandler(failureHandler())
+                .failureHandler(failureHandler())
                 // username 파라미터 이름을 변경
                 .usernameParameter("username")
                 // password 파라미터 이름을 변경
@@ -78,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그아웃 화면의 url
                 .logoutUrl("/admin/logout")
                 // 로그아웃 성공 시 이동 페이지(컨트롤러 매핑 필요)
-                .logoutSuccessUrl("/admin/logout/result")
+                .logoutSuccessUrl("/")
                 // Http 세션 초기화
                 .invalidateHttpSession(true)
                 .permitAll();
