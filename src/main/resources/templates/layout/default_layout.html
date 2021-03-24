@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Rangjin's Blog</title>
+
+    <!-- css config fragment -->
+    <div th:replace="fragment/config :: cssConfigFragment"></div>
+</head>
+<body class="no-spellcheck">
+
+<div th:replace="fragment/nav :: navFragment"></div>
+<div layout:fragment="header"></div>
+<div layout:fragment="content"></div>
+
+<hr>
+
+<div th:replace="fragment/footer :: footerFragment"></div>
+<div th:replace="fragment/config :: scriptConfigFragment"></div>
+
+</body>
+</html>
