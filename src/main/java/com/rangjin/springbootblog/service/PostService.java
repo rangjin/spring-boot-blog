@@ -20,6 +20,38 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
 
+    public Page<PostResponseDto> findAll(PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+
+        return postRepository.findAll(pageRequest.of()).map(PostResponseDto::new);
+    }
+
+    public Page<PostResponseDto> findByStatus(PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+
+        return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
+    }
+
+    public Page<PostResponseDto> findByCategory(Long id, PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return postRepository.findByCategory(category, pageRequest.of()).map(PostResponseDto::new);
+    }
+
+    public Page<PostResponseDto> findByStatusAndCategory(Long id, PageRequest pageRequest) {
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of()).map(PostResponseDto::new);
+    }
+
+    public PostResponseDto findById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        return new PostResponseDto(post);
+    }
+
     public PostResponseDto create(PostRequestDto dto) {
         Post post = Post.builder()
                 .title(dto.getTitle())
@@ -31,40 +63,13 @@ public class PostService {
         return new PostResponseDto(postRepository.save(post));
     }
 
-    public PostResponseDto findById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
-
-        return new PostResponseDto(post);
-    }
-
-    public Page<PostResponseDto> findByStatus(PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
-
-        return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
-    }
-
-    public Page<PostResponseDto> findByStatusAndCategory(Long id, PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
-        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
-
-        return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of()).map(PostResponseDto::new);
-    }
-
-    public Page<PostResponseDto> findByStatusForAdmin(PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
-
-        return postRepository.findAll(pageRequest.of()).map(PostResponseDto::new);
-    }
-
-    public Long modify(Long id, PostRequestDto dto) {
+    public PostResponseDto modify(Long id, PostRequestDto dto) {
         Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(RuntimeException::new);
 
         post.update(dto, category);
 
-        postRepository.save(post);
-
-        return post.getId();
+        return new PostResponseDto(postRepository.save(post));
     }
 
     public void delete(Long id) {
