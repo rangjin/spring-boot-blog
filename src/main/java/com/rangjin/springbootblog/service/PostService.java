@@ -1,5 +1,7 @@
 package com.rangjin.springbootblog.service;
 
+import com.rangjin.springbootblog.advice.exception.CustomCategoryNotFoundException;
+import com.rangjin.springbootblog.advice.exception.CustomPostNotFoundException;
 import com.rangjin.springbootblog.domain.PageRequest;
 import com.rangjin.springbootblog.domain.category.Category;
 import com.rangjin.springbootblog.domain.category.CategoryRepository;
@@ -34,20 +36,21 @@ public class PostService {
 
     public Page<PostResponseDto> findByCategory(Long id, PageRequest pageRequest) {
         pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
-        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+        Category category = categoryRepository.findById(id).orElseThrow(CustomCategoryNotFoundException::new);
 
         return postRepository.findByCategory(category, pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Page<PostResponseDto> findByStatusAndCategory(Long id, PageRequest pageRequest) {
         pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
-        Category category = categoryRepository.findById(id).orElseThrow(RuntimeException::new);
+        Category category = categoryRepository.findById(id).orElseThrow(CustomCategoryNotFoundException::new);
 
-        return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of()).map(PostResponseDto::new);
+        return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of())
+                .map(PostResponseDto::new);
     }
 
     public PostResponseDto findById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
+        Post post = postRepository.findById(id).orElseThrow(CustomPostNotFoundException::new);
 
         return new PostResponseDto(post);
     }
@@ -64,8 +67,9 @@ public class PostService {
     }
 
     public PostResponseDto modify(Long id, PostRequestDto dto) {
-        Post post = postRepository.findById(id).orElseThrow(RuntimeException::new);
-        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(RuntimeException::new);
+        Post post = postRepository.findById(id).orElseThrow(CustomPostNotFoundException::new);
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(CustomCategoryNotFoundException::new);
 
         post.update(dto, category);
 

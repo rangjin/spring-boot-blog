@@ -47,7 +47,8 @@ public class PostApiController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> modify(@PathVariable("id") Long id, @RequestBody @Valid PostRequestDto dto, Errors errors) {
+    public ResponseEntity<?> modify(@PathVariable("id") Long id,
+                                    @RequestBody @Valid PostRequestDto dto, Errors errors) {
         if (errors.hasErrors()) {
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
