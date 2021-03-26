@@ -85,7 +85,7 @@ public class PostController {
             return "post/edit";
         }
 
-        return "redirect:/post/detail/" + postService.modify(id, dto);
+        return "redirect:/post/detail/" + postService.modify(id, dto).getId();
     }
 
     @GetMapping("post/delete/{id}")

@@ -37,7 +37,7 @@ public class CategoryController {
         if (errors.hasErrors()) {
             model.addAttribute("dto", dto);
 
-            return "category/edit";
+            return "category/create";
         }
 
         categoryService.create(dto);
