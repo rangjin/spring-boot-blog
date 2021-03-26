@@ -2,7 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layout/default_layout">
+      data-layout-decorate="~{layout/default_layout}">
+
+<script layout:fragment="script">
+  function deleteConfirm(id) {
+    var result = confirm('정말로 게시글을 삭제하시겠습니까?');
+
+    if (result) {
+      alert('게시글이 삭제되었습니다.');
+
+      console.log(location.host + "/post/delete/" + id);
+      location.href = "http://" + location.host + "/post/delete/" + id;
+    }
+  }
+</script>
 
 <!-- Page Header -->
 <header layout:fragment="header" class="masthead" style="background-image: url('/img/post-bg.jpg')">
@@ -38,18 +51,5 @@
     </div>
   </div>
 </article>
-
-<script layout:fragment="script">
-  function deleteConfirm(id) {
-    var result = confirm('정말로 게시글을 삭제하시겠습니까?');
-
-    if (result) {
-      alert('게시글이 삭제되었습니다.');
-
-      console.log(location.host + "/post/delete/" + id);
-      location.href = "http://" + location.host + "/post/delete/" + id;
-    }
-  }
-</script>
 
 </html>
