@@ -21,7 +21,7 @@ public class CategoryResponseDto {
     public CategoryResponseDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
-        this.postCnt = category.getPostList().size();
+        this.postCnt = category.getPostList() != null ? category.getPostList().size() : 0;
         this.createdAt = category.getCreatedAt();
         this.updatedAt = category.getUpdatedAt();
     }
