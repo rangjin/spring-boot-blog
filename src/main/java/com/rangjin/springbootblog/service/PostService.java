@@ -20,7 +20,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
 
-    public Long create(PostRequestDto dto) {
+    public PostResponseDto create(PostRequestDto dto) {
         Post post = Post.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -28,7 +28,7 @@ public class PostService {
                 .category(categoryRepository.findById(dto.getCategoryId()).orElse(null))
                 .build();
 
-        return postRepository.save(post).getId();
+        return new PostResponseDto(postRepository.save(post));
     }
 
     public PostResponseDto findById(Long id) {

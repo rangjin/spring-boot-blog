@@ -1,4 +1,4 @@
-package com.rangjin.springbootblog.web;
+package com.rangjin.springbootblog.web.common;
 
 import com.rangjin.springbootblog.domain.validator.CategoryValidator;
 import com.rangjin.springbootblog.service.CategoryService;

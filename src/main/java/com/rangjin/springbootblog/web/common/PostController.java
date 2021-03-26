@@ -1,14 +1,11 @@
-package com.rangjin.springbootblog.web;
+package com.rangjin.springbootblog.web.common;
 
 import com.rangjin.springbootblog.domain.PageRequest;
-import com.rangjin.springbootblog.domain.validator.PostValidator;
 import com.rangjin.springbootblog.service.CategoryService;
 import com.rangjin.springbootblog.service.PostService;
 import com.rangjin.springbootblog.web.dto.CategoryResponseDto;
 import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -50,12 +48,6 @@ public class PostController {
     public String detail(Model model, @PathVariable("id") Long id) {
         model.addAttribute("post", postService.findById(id));
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth.isAuthenticated()) {
-            model.addAttribute("username", auth.getName());
-        }
-
         return "post/detail";
     }
 
@@ -66,16 +58,14 @@ public class PostController {
     }
 
     @PostMapping("post/create")
-    public String create(@ModelAttribute("dto") PostRequestDto dto, Errors errors, Model model) {
-        new PostValidator().validate(dto, errors);
-
+    public String create(@ModelAttribute("dto") @Valid PostRequestDto dto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("dto", dto);
 
             return "post/create";
         }
 
-        return "redirect:/post/detail/" + postService.create(dto);
+        return "redirect:/post/detail/" + postService.create(dto).getId();
     }
 
     @GetMapping("post/edit/{id}")
@@ -87,9 +77,7 @@ public class PostController {
     }
 
     @PostMapping("post/edit/{id}")
-    public String modify(@PathVariable("id") Long id, @ModelAttribute("dto") PostRequestDto dto, Errors errors, Model model) {
-        new PostValidator().validate(dto, errors);
-
+    public String modify(@PathVariable("id") Long id, @ModelAttribute("dto") @Valid PostRequestDto dto, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("post", postService.findById(id));
             model.addAttribute("dto", dto);
