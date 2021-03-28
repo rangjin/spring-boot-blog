@@ -36,6 +36,10 @@ public class CategoryService {
             .collect(Collectors.toList());
     }
 
+    public boolean existsByName(String name) {
+        return categoryRepository.existsByName(name);
+    }
+
     public CategoryResponseDto modify(Long id, CategoryRequestDto dto) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(CustomCategoryNotFoundException::new);

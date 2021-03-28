@@ -32,7 +32,7 @@ public class CategoryController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute("dto") CategoryRequestDto dto, Errors errors, Model model) {
-        new CategoryValidator().validate(dto, errors);
+        new CategoryValidator(categoryService).validate(dto, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute("dto", dto);
@@ -55,7 +55,7 @@ public class CategoryController {
 
     @PostMapping("/edit/{id}")
     public String modify(@PathVariable("id") Long id, @ModelAttribute("dto") CategoryRequestDto dto, Errors errors, Model model) {
-        new CategoryValidator().validate(dto, errors);
+        new CategoryValidator(categoryService).validate(dto, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute("category", categoryService.findById(id));

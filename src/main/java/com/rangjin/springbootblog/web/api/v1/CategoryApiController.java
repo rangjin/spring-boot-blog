@@ -1,10 +1,12 @@
 package com.rangjin.springbootblog.web.api.v1;
 
+import com.rangjin.springbootblog.domain.validator.CategoryValidator;
 import com.rangjin.springbootblog.service.CategoryService;
 import com.rangjin.springbootblog.web.dto.CategoryRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,12 +24,25 @@ public class CategoryApiController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody @Valid CategoryRequestDto dto) {
+    public ResponseEntity<?> create(@RequestBody @Valid CategoryRequestDto dto, Errors errors) {
+        new CategoryValidator(categoryService).validate(dto, errors);
+
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(categoryService.create(dto), HttpStatus.OK);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<?> modify(@PathVariable("id") Long id, @RequestBody @Valid CategoryRequestDto dto) {
+    public ResponseEntity<?> modify(@PathVariable("id") Long id,
+                                    @RequestBody @Valid CategoryRequestDto dto, Errors errors) {
+        new CategoryValidator(categoryService).validate(dto, errors);
+
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(categoryService.modify(id, dto), HttpStatus.OK);
     }
 
