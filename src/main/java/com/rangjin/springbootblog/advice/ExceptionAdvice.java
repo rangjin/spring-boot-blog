@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 public class ExceptionAdvice {
 
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ErrorResponse> exception() {
+        return new ResponseEntity<>(new ErrorResponse(1500, "예기치 못한 오류가 발생했습니다"),
+            HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(CustomPostNotFoundException.class)
     protected ResponseEntity<ErrorResponse> postNotFoundException() {
         return new ResponseEntity<>(new ErrorResponse(1001, "해당 포스트가 존재하지 않습니다"),
