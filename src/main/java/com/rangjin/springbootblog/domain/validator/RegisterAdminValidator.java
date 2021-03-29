@@ -1,30 +1,31 @@
 package com.rangjin.springbootblog.domain.validator;
 
+import com.rangjin.springbootblog.service.AdminService;
 import com.rangjin.springbootblog.web.dto.AdminRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@RequiredArgsConstructor
 public class RegisterAdminValidator implements Validator {
+
+    private final AdminService adminService;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return AdminRequestDto.class.isAssignableFrom(clazz);
+        return AdminRequestDto.RegisterDto.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        AdminRequestDto dto = (AdminRequestDto) target;
+        AdminRequestDto.RegisterDto dto = (AdminRequestDto.RegisterDto) target;
 
-        if (dto.getUsername().equals("")) {
-            errors.rejectValue("username", "required", "아이디를 입력하세요");
+        if (adminService.existsByUserName(dto.getUsername())) {
+            errors.rejectValue("username", "overlap", "사용할 수 없는 아이디입니다");
         }
 
-        if (dto.getPassword().equals("")) {
-            errors.rejectValue("password", "required", "비밀번호를 입력하세요");
-        }
-
-        if (dto.getRePassword().equals("")) {
-            errors.rejectValue("rePassword", "required", "비밀번호를 다시 입력하세요");
+        if (!dto.getPassword().equals(dto.getRePassword())) {
+            errors.rejectValue("rePassword", "unMatched", "비밀번호가 일치하지 않습니다");
         }
     }
 

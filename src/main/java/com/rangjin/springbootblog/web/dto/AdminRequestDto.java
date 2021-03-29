@@ -1,24 +1,30 @@
 package com.rangjin.springbootblog.web.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import javax.validation.constraints.NotBlank;
+
 public class AdminRequestDto {
 
-    private String username;
-    private String password;
-    private String rePassword;
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class RegisterDto {
+        @NotBlank(message = "아이디를 입력해주세요")
+        private String username;
 
-    @Builder
-    public AdminRequestDto(String username, String password, String rePassword) {
-        this.username = username;
-        this.password = password;
-        this.rePassword = rePassword;
+        @NotBlank(message = "비밀번호를 입력해주세요")
+        private String password;
+
+        @NotBlank(message = "비밀번호를 다시 입력해주세요")
+        private String rePassword;
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class LoginDto {
+        @NotBlank(message = "아이디를 입력해주세요")
+        private String username;
+
+        @NotBlank(message = "비밀번호를 입력해주세요")
+        private String password;
     }
 
 }

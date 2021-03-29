@@ -24,8 +24,8 @@ public class AdminController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("dto") AdminRequestDto dto, Errors errors, Model model) {
-        new RegisterAdminValidator().validate(dto, errors);
+    public String register(@ModelAttribute("dto") AdminRequestDto.RegisterDto dto, Errors errors, Model model) {
+        new RegisterAdminValidator(adminService).validate(dto, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute("dto", dto);
