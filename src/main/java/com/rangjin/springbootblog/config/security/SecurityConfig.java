@@ -1,7 +1,5 @@
 package com.rangjin.springbootblog.config.security;
 
-import com.rangjin.springbootblog.config.security.JwtAuthenticationFilter;
-import com.rangjin.springbootblog.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .antMatchers("/api/v1/category/create", "/api/v1/category/edit/**", "/api/v1/category/delete/**").hasRole("ADMIN")
                                 // 모든 경로에 대해 권한없이 접근 가능
                                 .anyRequest().permitAll()
+                .and()
+                        .exceptionHandling()
+                                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                                .accessDeniedHandler(new CustomAccessDenied())
                 .and()
                         .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }

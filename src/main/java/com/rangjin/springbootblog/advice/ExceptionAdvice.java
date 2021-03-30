@@ -1,8 +1,6 @@
 package com.rangjin.springbootblog.advice;
 
-import com.rangjin.springbootblog.advice.exception.CustomAdminNotFoundException;
-import com.rangjin.springbootblog.advice.exception.CustomCategoryNotFoundException;
-import com.rangjin.springbootblog.advice.exception.CustomPostNotFoundException;
+import com.rangjin.springbootblog.advice.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> exception() {
-        return new ResponseEntity<>(new ErrorResponse(1500, "예기치 못한 오류가 발생했습니다"),
+        return new ResponseEntity<>(new ErrorResponse(1000, "예기치 못한 오류가 발생했습니다"),
             HttpStatus.BAD_REQUEST);
     }
 
@@ -36,5 +34,18 @@ public class ExceptionAdvice {
         return new ResponseEntity<>(new ErrorResponse(1003, "해당 관리자가 존재하지 않습니다"),
                 HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CustomAuthenticationEntryPointException.class)
+    protected ResponseEntity<ErrorResponse> authenticationEntryPointException() {
+        return new ResponseEntity<>(new ErrorResponse(1004, "다시 로그인 한 후 이용해 주십시오"),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomAccessDeniedException.class)
+    protected ResponseEntity<ErrorResponse> accessDeniedException() {
+        return new ResponseEntity<>(new ErrorResponse(1005, "해당 페이지에 접근 권한이 없습니다"),
+                HttpStatus.FORBIDDEN);
+    }
+
 
 }
