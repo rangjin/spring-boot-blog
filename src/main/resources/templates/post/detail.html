@@ -4,19 +4,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       data-layout-decorate="~{layout/default_layout}">
 
-<script layout:fragment="script">
-  function deleteConfirm(id) {
-    var result = confirm('정말로 게시글을 삭제하시겠습니까?');
-
-    if (result) {
-      alert('게시글이 삭제되었습니다.');
-
-      console.log(location.host + "/post/delete/" + id);
-      location.href = "http://" + location.host + "/post/delete/" + id;
-    }
-  }
-</script>
-
 <!-- Page Header -->
 <header layout:fragment="header" class="masthead" style="background-image: url('/img/post-bg.jpg')">
   <div class="overlay"></div>
@@ -24,11 +11,11 @@
     <div class="row">
       <div class="col-lg-10 col-md-10 mx-auto">
         <div class="post-heading">
-          <h1 th:text="${post.title}"></h1>
+          <h1 id="post-title"></h1>
           <span class="meta">
-            Posted at <strong th:text="${#temporals.format(post.getUpdatedAt(), 'yyyy-MM-dd HH:mm')}"></strong>
+            Posted at <strong id="post-updated-at"></strong>
             <br>
-            Category : <strong th:text="${post.getCategoryName()}"></strong>
+            Category : <strong id="post-category-name"></strong>
           </span>
         </div>
       </div>
@@ -41,15 +28,27 @@
   <div class="container">
     <div class="row">
       <div class="font col-lg-10 col-md-10 mx-auto" style="margin-bottom: 50px;">
-        <div sec:authorize="isAuthenticated()" style="float: right;">
-          <a th:href="@{../../post/edit/{id}(id = ${post.getId()})}" class="btn-sm btn-primary">Edit</a>
-          <a th:onclick="deleteConfirm([[${post.getId()}]])" class="btn-sm btn-primary">Delete</a>
+        <div style="float: right;">
+          <a id="post-edit-button" class="btn-sm btn-primary">Edit</a>
+          <a id="post-delete-button" class="btn-sm btn-primary">Delete</a>
         </div>
-        <div id="in" style="display: none;"><textarea id="code" name="content" th:utext="${post.content}" readonly></textarea></div>
+        <div id="in" style="display: none;"><textarea id="code" name="content" readonly></textarea></div>
         <div id="out" style="margin-top: 40px;" class="markdown-body"></div>
       </div>
     </div>
   </div>
 </article>
+
+<script layout:fragment="script">
+  $(window).ready(function () {
+    $.ajax({
+      type: 'GET',
+      url: '/api/v1' + location.pathname,
+      success: function (result) {
+        content(result);
+      }
+    })
+  })
+</script>
 
 </html>

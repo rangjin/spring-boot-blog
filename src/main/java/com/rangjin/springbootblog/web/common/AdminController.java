@@ -18,24 +18,7 @@ public class AdminController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("dto", new AdminRequestDto());
-
         return "admin/register";
-    }
-
-    @PostMapping("/register")
-    public String register(@ModelAttribute("dto") AdminRequestDto.RegisterDto dto, Errors errors, Model model) {
-        new RegisterAdminValidator(adminService).validate(dto, errors);
-
-        if (errors.hasErrors()) {
-            model.addAttribute("dto", dto);
-
-            return "admin/register";
-        }
-
-        adminService.register(dto);
-
-        return "redirect:/";
     }
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
