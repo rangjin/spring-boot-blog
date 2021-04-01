@@ -62,7 +62,7 @@ let content = function (result) {
     $('#post-title').text(result.title);
     $('#post-updated-at').text(result.updatedAt);
     $('#post-category-name').text(result.categoryName);
-    $('#code').text(result.content);
+    $('#code').val(result.content);
 
     setButton(result.id);
 

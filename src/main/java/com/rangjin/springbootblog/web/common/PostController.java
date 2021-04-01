@@ -30,9 +30,7 @@ public class PostController {
     }
 
     @GetMapping("/")
-    public String index(Model model, PageRequest pageRequest) {
-        model.addAttribute("list", postService.findByStatus(pageRequest));
-
+    public String index() {
         return "index";
     }
 
@@ -45,15 +43,12 @@ public class PostController {
     }
 
     @GetMapping("/post/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("post", postService.findById(id));
-
+    public String detail(@PathVariable("id") Long id) {
         return "post/detail";
     }
 
     @GetMapping("post/create")
-    public String create(Model model) {
-        model.addAttribute("dto", new PostRequestDto());
+    public String create() {
         return "post/create";
     }
 
