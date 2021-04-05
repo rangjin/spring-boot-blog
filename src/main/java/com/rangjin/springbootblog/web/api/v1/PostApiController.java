@@ -2,6 +2,7 @@ package com.rangjin.springbootblog.web.api.v1;
 
 import com.rangjin.springbootblog.domain.PageRequest;
 import com.rangjin.springbootblog.service.PostService;
+import com.rangjin.springbootblog.web.dto.FormResponse;
 import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -40,20 +41,20 @@ public class PostApiController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody @Valid PostRequestDto dto, Errors errors) {
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new FormResponse<>(false, errors), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(postService.create(dto), HttpStatus.OK);
+        return new ResponseEntity<>(new FormResponse<>(true, postService.create(dto)), HttpStatus.OK);
     }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> modify(@PathVariable("id") Long id,
                                     @RequestBody @Valid PostRequestDto dto, Errors errors) {
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new FormResponse<>(false, errors), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(postService.modify(id, dto), HttpStatus.OK);
+        return new ResponseEntity<>(new FormResponse<>(true, postService.modify(id, dto)), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
