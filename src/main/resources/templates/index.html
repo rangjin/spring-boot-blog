@@ -62,16 +62,7 @@
 </div>
 
 <script layout:fragment="script">
-  $(window).ready(function () {
-    $.ajax({
-      type: 'GET',
-      url: '/api/v1/post/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
-      success: function (result) {
-        boardList(result.content);
-        page(result.number, result.totalPages, result.first, result.last)
-      }
-    })
-  });
+  index();
 </script>
 
 </html>

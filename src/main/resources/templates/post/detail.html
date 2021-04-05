@@ -40,15 +40,7 @@
 </article>
 
 <script layout:fragment="script">
-  $(window).ready(function () {
-    $.ajax({
-      type: 'GET',
-      url: '/api/v1' + location.pathname,
-      success: function (result) {
-        content(result);
-      }
-    })
-  })
+  detail();
 </script>
 
 </html>
