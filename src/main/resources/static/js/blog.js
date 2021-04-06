@@ -73,6 +73,13 @@ let page = function (number, totalPages, first, last) {
 
 let create = function () {
     $(window).ready(function () {
+        let md = new MdEditor('#mdeditor', {
+            uploader: 'http://local.dev/Lab/MdEditor/app/upload.php',
+            preview: true,
+            images: [
+            ]
+        });
+
         $.ajax({
             type: 'GET',
             url: '/api/v1/category',
@@ -89,7 +96,7 @@ let create = function () {
     $('#post-create-button').on('click', function () {
         let data = {
             title : $('#title').val(),
-            content : document.getElementById('in').innerText,
+            content : $('#mdeditor').val(),
             categoryId : $('#categoryId').val(),
             status : $('#status').val() === "" ? null : $('#status').val()
         }
@@ -130,26 +137,24 @@ let detail = function () {
 }
 
 let content = function (result) {
+    $('#mdeditor').val(result.content);
+
+    let md = new MdEditor('#mdeditor', {
+        uploader: 'http://local.dev/Lab/MdEditor/app/upload.php',
+        preview: true,
+        images: [
+        ]
+    });
+
+    $('#out').html($('.mdeditor_render'));
+    $('#in').remove();
+
     $('#post-title').text(result.title);
     $('#post-updated-at').text(new Date(result.updatedAt));
     $('#post-category-name').text(result.categoryName);
-    $('#code').val(result.content);
+
 
     setButton(result.id);
-
-    var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
-        mode: "spell-checker",
-        backdrop: "gfm",
-        lineNumbers: false,
-        matchBrackets: true,
-        lineWrapping: true,
-        theme: 'base16-light',
-        extraKeys: {
-            "Enter": "newlineAndIndentContinueMarkdownList"
-        }
-    });
-
-    update(editor);
 }
 
 let deleteConfirm = function (id) {
