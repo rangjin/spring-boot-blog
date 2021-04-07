@@ -66,67 +66,7 @@
 </div>
 
 <script layout:fragment="script">
-    $(window).ready(function () {
-        $.ajax({
-            type: 'GET',
-            url: '/api/v1/category',
-            success: function (results) {
-                results.forEach(result => {
-                    let html = '<option value="' + result.id + '">' + result.name + '</option>';
-
-                    $('#categoryId').append(html);
-                })
-            }
-        })
-
-        $.ajax({
-            type: 'GET',
-            url: '/api/v1/post/detail/' + location.pathname.replace(/[^0-9]/g,''),
-            success: function (result) {
-                $('#title').val(result.title);
-                $('#categoryId').find($('option[value=' + result.categoryId + ']')).attr('selected', 'selected');
-                $('#status').find($('option[value=' + result.status + '')).attr('selected', 'selected');
-                $('#mdeditor').val(result.content);
-
-                let md = new MdEditor('#mdeditor', {
-                    uploader: 'http://local.dev/Lab/MdEditor/app/upload.php',
-                    preview: true,
-                    images: [
-                    ]
-                });
-            }
-        })
-    })
-
-    $('#post-edit-button').on('click', function () {
-        let data = {
-            title : $('#title').val(),
-            content : $('#mdeditor').val(),
-            categoryId : $('#categoryId').val(),
-            status : $('#status').val() === "" ? null : $('#status').val()
-        }
-
-        $.ajax({
-            type: 'PUT',
-            url: '/api/v1/post/edit/' + location.pathname.replace(/[^0-9]/g,''),
-            dataType: 'json',
-            contentType: 'application/json; charset=UTF-8',
-            data: JSON.stringify(data),
-            success: function (result) {
-                if (result.validated == true) {
-                    alert("글이 수정되었습니다");
-
-                    location.href = "http://" + location.host + "/post/detail/" + result.data.id;
-                } else {
-                    $('.is-invalid').removeClass('is-invalid');
-
-                    result.data.forEach(function (error) {
-                        $('#' + error.field).addClass('is-invalid').attr('placeholder', error.defaultMessage);
-                    })
-                }
-            }
-        })
-    });
+    editPost();
 </script>
 
 </html>
