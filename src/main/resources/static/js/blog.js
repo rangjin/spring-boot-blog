@@ -42,7 +42,7 @@ let boardList = function (list) {
     list.forEach(post => {
         let html = '<a href="/post/detail/' + post.id + '">';
         html += '<h2 class="post-title">' + post.title + '</h2></a>';
-        html += '<p class="post-meta">Posted at <strong>' + new Date(post.updatedAt) + '</strong><br>Category <strong>' + post.categoryName + '</strong></p><hr>'
+        html += '<p class="post-meta">Category <strong>' + post.categoryName + '</strong><br>Posted at <strong>' + new Date(post.updatedAt).toLocaleString() + '</strong></p><hr>'
 
         $('.post-preview').append(html);
     });
@@ -154,7 +154,7 @@ let postDetail = function () {
                 $('#in').remove();
 
                 $('#post-title').text(result.title);
-                $('#post-updated-at').text(new Date(result.updatedAt));
+                $('#post-updated-at').text(new Date(result.updatedAt).toLocaleString());
                 $('#post-category-name').text(result.categoryName);
 
                 $('#post-edit-button').attr('href', '/post/edit/' + result.id);
