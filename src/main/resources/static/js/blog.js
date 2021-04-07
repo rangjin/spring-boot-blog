@@ -52,13 +52,15 @@ let page = function (number, totalPages, first, last) {
     let start = (Math.floor(number / 10) * 10) + 1;
     let end = start + 9 < totalPages ? start + 9 : totalPages;
 
+    $('#move-to-first').children('a').attr('href', location.pathname + "?page=1");
+
     if (first === true) {
         $('#move-to-previous').addClass('disabled');
     }
-    $('#move-to-previous').children('a').attr("href", first ? '#' : "/?page=" + number);
+    $('#move-to-previous').children('a').attr("href", first ? '#' : location.pathname + "?page=" + number);
 
     for (let i = start; i <= end; i++) {
-        let html = '<li id="' + i + '" class="page-item"><a class="page-link" href="/?page=' + i + '">' + i + '</a></li>';
+        let html = '<li id="' + i + '" class="page-item"><a class="page-link" href="' + location.pathname + '?page=' + i + '">' + i + '</a></li>';
         $('#move-to-next').before(html);
     }
     $('#' + (number + 1)).addClass("active");
@@ -66,9 +68,9 @@ let page = function (number, totalPages, first, last) {
     if (last === true) {
         $('#move-to-next').addClass('disabled');
     }
-    $('#move-to-next').children('a').attr("href", last ? '#' : "/?page=" + (number + 2));
+    $('#move-to-next').children('a').attr("href", last ? '#' : location.pathname + "?page=" + (number + 2));
 
-    $('#move-to-last').children('a').attr("href", "/?page=" + totalPages);
+    $('#move-to-last').children('a').attr("href", location.pathname + "?page=" + totalPages);
 }
 
 let mdEditor = function () {
@@ -215,4 +217,23 @@ let deletePost = function (id) {
 
         location.href = "http://" + location.host;
     }
+}
+
+let postsFindByCategory = function () {
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
+        success: function (result) {
+            $('#categoryInfo').text(result.name + "(" + result.postCnt + ")");
+        }
+    })
+
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1' + location.pathname + '/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
+        success: function (result) {
+            boardList(result.content);
+            page(result.number, result.totalPages, result.first, result.last)
+        }
+    })
 }

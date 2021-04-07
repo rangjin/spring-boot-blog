@@ -23,6 +23,11 @@ public class CategoryApiController {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody @Valid CategoryRequestDto dto, Errors errors) {
         new CategoryValidator(categoryService).validate(dto, errors);

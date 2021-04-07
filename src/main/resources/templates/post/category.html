@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <div class="site-heading">
-          <h1 th:text="${category.name} + '(' + ${category.getPostCnt()} + ')'"></h1>
+          <h1 id="categoryInfo"></h1>
         </div>
       </div>
     </div>
@@ -21,45 +21,31 @@
 <div layout:fragment="content" class="container">
   <div class="row">
     <div class="col-lg-8 col-md-10 mx-auto" style="margin-bottom: 50px;">
-      <div class="post-preview" th:each="post : ${list}">
-        <a th:href="@{'/post/detail/' + ${post.getId()}}">
-          <h2 class="post-title" th:text="${post.getTitle()}"></h2>
-          <!-- #string.abbreviate : 글자 수 자르기 -->
-          <h3 class="post-subtitle" th:text="${#strings.abbreviate(post.getContent(), 50)}"></h3>
-        </a>
-        <p class="post-meta">
-          <!-- #temporals.format : LocalDateTime 출력 형식 지정 -->
-          Posted at <strong th:text="${#temporals.format(post.getUpdatedAt(), 'yyyy-MM-dd HH:mm')}"></strong>
-          <br>
-          Category <strong th:text="${post.getCategoryName()}"></strong>
-        </p>
-        <hr>
+      <div class="post-preview">
+        <!-- content -->
       </div>
 
       <!-- Pager -->
       <div>
         <nav style="margin-top: 15px;">
-          <ul class="pagination justify-content-center" th:with="start = ${T(Math).floor(list.number / 10) * 10 + 1}, last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
-            <li class="page-item">
-              <a class="page-link" th:href="@{/post/category/{id}(id = ${category.getId()}, page = 1)}">
+          <ul class="pagination justify-content-center">
+            <li id="move-to-first" class="page-item">
+              <a class="page-link">
                 <span><<</span>
               </a>
             </li>
-            <li class="page-item" th:classappend="${list.first} ? 'disabled'">
-              <a class="page-link" th:href="${list.first} ? '#' : @{/post/category/{id}(id = ${category.getId()}, page = ${list.number})}">
+            <li id="move-to-previous" class="page-item">
+              <a class="page-link">
                 <span><</span>
               </a>
             </li>
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == list.number + 1} ? 'active'">
-              <a class="page-link" th:text="${page}" th:href="@{/post/category/{id}(id = ${category.getId()}, page = ${page})}"></a>
-            </li>
-            <li class="page-item" th:classappend="${list.last} ? 'disabled'">
-              <a class="page-link" th:href="${list.last} ? '#' : @{/post/category/{id}(id = ${category.getId()}, page = ${list.number + 2})}">
+            <li id="move-to-next" class="page-item">
+              <a class="page-link">
                 <span>&gt;</span>
               </a>
             </li>
-            <li class="page-item">
-              <a class="page-link" th:href="@{/post/category/{id}(id = ${category.getId()}, page = ${list.totalPages})}">
+            <li id="move-to-last" class="page-item">
+              <a class="page-link">
                 <span>>></span>
               </a>
             </li>
@@ -69,5 +55,9 @@
     </div>
   </div>
 </div>
+
+<script layout:fragment="script">
+  postsFindByCategory();
+</script>
 
 </html>
