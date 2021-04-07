@@ -24,8 +24,8 @@
     <div class="container">
         <div class="row">
             <div class="font col-lg-10 col-md-10 mx-auto">
-                <div sec:authorize="isAuthenticated()" style="float: right; margin-bottom: 20px;">
-                    <a th:href="@{/category/create}" class="btn-sm btn-primary">Create</a>
+                <div style="float: right; margin-bottom: 20px;">
+                    <a href="/category/create" class="btn-sm btn-primary">Create</a>
                 </div>
                 <div>
                     <table class="table table-hover" style="margin-bottom: 50px;">
@@ -34,18 +34,11 @@
                             <td>#</td>
                             <td>이름</td>
                             <td>게시물 갯수</td>
-                            <td sec:authorize="isAuthenticated()">수정</td>
-                            <td sec:authorize="isAuthenticated()">삭제</td>
+                            <td>수정</td>
+                            <td>삭제</td>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:with="start = 0" th:each="category : ${categories}">
-                            <td th:text="${categoryStat.index + 1}"></td>
-                            <td th:text="${category.getName()}"  th:onclick="location.href = 'http://' + location.host + '/post/category/' + [[${category.getId()}]]"></td>
-                            <td th:text="${category.getPostCnt()}"></td>
-                            <td sec:authorize="isAuthenticated()"><a th:href="@{/category/edit/{id}(id = ${category.getId()})}" class="btn-sm btn-primary">Edit</a></td>
-                            <td sec:authorize="isAuthenticated()"><a th:onclick="deleteConfirm([[${category.getId()}]])" class="btn-sm btn-primary">Delete</a></td>
-                        </tr>
+                        <tbody id="categoryList">
                         </tbody>
                     </table>
                 </div>
@@ -55,14 +48,7 @@
 </article>
 
 <script layout:fragment="script">
-    function deleteConfirm(id) {
-        var result = confirm("해당 카테고리와 게시물들을 전부 삭제하시겠습니까?");
-
-        if (result) {
-            alert('카테고리와 게시물들이 전부 삭제되었습니다');
-            location.href = 'http://' + location.host + '/category/delete/' + id;
-        }
-    }
+    categoryList();
 </script>
 
 </html>

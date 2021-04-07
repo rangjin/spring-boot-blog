@@ -212,10 +212,10 @@ let deletePost = function (id) {
             url: '/api/v1/post/delete/' + id,
             success: function () {
                 alert('게시글이 삭제되었습니다');
+
+                location.href = "http://" + location.host;
             }
         })
-
-        location.href = "http://" + location.host;
     }
 }
 
@@ -236,4 +236,41 @@ let postsFindByCategory = function () {
             page(result.number, result.totalPages, result.first, result.last)
         }
     })
+}
+
+let categoryList = function () {
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1/category',
+        success: function (list) {
+            let i = 1;
+
+            list.forEach(category => {
+                let html = '<tr><td>' + (i++) +  '</td><td>' + category.name + '</td><td>' + category.postCnt + '</td>';
+                html += '<td><a class = "btn-sm btn-primary" href="/category/edit/' + category.id + '">Edit</a></td>'
+                html += '<td><a class = "btn-sm btn-primary" onclick="deleteCategory(' + category.id + ')">Delete</a></td></tr>';
+
+                $('#categoryList').append(html);
+            })
+        }
+    })
+}
+
+let deleteCategory = function (id) {
+    let result = confirm("해당 카테고리와 게시물들을 전부 삭제하시겠습니까?");
+
+    if (result) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/v1/category/delete/' + id,
+            success: function () {
+                alert('카테고리와 게시물들이 전부 삭제되었습니다');
+
+                location.href = 'http://' + location.host;
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
 }
