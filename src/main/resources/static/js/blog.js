@@ -120,7 +120,11 @@ let printValidationError = function (errors) {
     errors.forEach(function (error) {
         let field = $('#' + error.field);
 
-        field.addClass('is-invalid').val("").attr('placeholder', error.defaultMessage);
+        if (field.prop('tagName') === "SELECT") {
+            field.addClass('is-invalid').find('.select-error').text(error.defaultMessage);
+        } else {
+            field.addClass('is-invalid').val("").attr('placeholder', error.defaultMessage);
+        }
     })
 }
 
