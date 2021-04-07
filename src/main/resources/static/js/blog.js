@@ -12,37 +12,43 @@ let index = function () {
 }
 
 jQuery.extend({
-    getURLParam: function(strParamName){
-        var strReturn = "";
-        var strHref = window.location.href;
-        var bFound=false;
+    getURLParam: function (strParamName) {
+        let strReturn = "";
+        let strHref = window.location.href;
+        let bFound = false;
 
-        var cmpstring = strParamName + "=";
-        var cmplen = cmpstring.length;
+        let cmpString = strParamName + "=";
+        let cmpLen = cmpString.length;
 
-        if ( strHref.indexOf("?") > -1 ){
-            var strQueryString = strHref.substr(strHref.indexOf("?")+1);
-            var aQueryString = strQueryString.split("&");
-            for ( var iParam = 0; iParam < aQueryString.length; iParam++ ){
-                if (aQueryString[iParam].substr(0,cmplen)==cmpstring){
-                    var aParam = aQueryString[iParam].split("=");
+        if (strHref.indexOf("?") > -1){
+            let strQueryString = strHref.substr(strHref.indexOf("?") + 1);
+            let aQueryString = strQueryString.split("&");
+            for (let iParam = 0; iParam < aQueryString.length; iParam++) {
+                if (aQueryString[iParam].substr(0,cmpLen) === cmpString) {
+                    let aParam = aQueryString[iParam].split("=");
                     strReturn = aParam[1];
-                    bFound=true;
+                    bFound = true;
+
                     break;
                 }
 
             }
         }
-        if (bFound==false) return null;
+        if (bFound === false) return null;
+
         return strReturn;
     }
 });
 
 let boardList = function (list) {
     list.forEach(post => {
-        let html = '<a href="/post/detail/' + post.id + '">';
-        html += '<h2 class="post-title">' + post.title + '</h2></a>';
-        html += '<p class="post-meta">Category <strong>' + post.categoryName + '</strong><br>Posted at <strong>' + new Date(post.updatedAt).toLocaleString() + '</strong></p><hr>'
+        let html = '<a href="/post/detail/' + post.id + '"><h2 class="post-title">' + post.title + '</h2></a>' +
+            '<p class="post-meta">' +
+            'Category <strong>' + post.categoryName + '</strong>' +
+            '<br>' +
+            'Posted at <strong>' + new Date(post.updatedAt).toLocaleString() + '</strong>' +
+            '</p>' +
+            '<hr>'
 
         $('.post-preview').append(html);
     });
@@ -52,29 +58,32 @@ let page = function (number, totalPages, first, last) {
     let start = (Math.floor(number / 10) * 10) + 1;
     let end = start + 9 < totalPages ? start + 9 : totalPages;
 
+    let previous = $('#move-to-previous');
+    let next = $('#move-to-next');
+
     $('#move-to-first').children('a').attr('href', location.pathname + "?page=1");
 
     if (first === true) {
-        $('#move-to-previous').addClass('disabled');
+        previous.addClass('disabled');
     }
-    $('#move-to-previous').children('a').attr("href", first ? '#' : location.pathname + "?page=" + number);
+    previous.children('a').attr("href", first ? '#' : location.pathname + "?page=" + number);
 
     for (let i = start; i <= end; i++) {
         let html = '<li id="' + i + '" class="page-item"><a class="page-link" href="' + location.pathname + '?page=' + i + '">' + i + '</a></li>';
-        $('#move-to-next').before(html);
+        next.before(html);
     }
     $('#' + (number + 1)).addClass("active");
 
     if (last === true) {
-        $('#move-to-next').addClass('disabled');
+        next.addClass('disabled');
     }
-    $('#move-to-next').children('a').attr("href", last ? '#' : location.pathname + "?page=" + (number + 2));
+    next.children('a').attr("href", last ? '#' : location.pathname + "?page=" + (number + 2));
 
     $('#move-to-last').children('a').attr("href", location.pathname + "?page=" + totalPages);
 }
 
 let mdEditor = function () {
-    let md = new MdEditor('#mdeditor', {
+    new MdEditor('#mdeditor', {
         uploader: 'http://local.dev/Lab/MdEditor/app/upload.php',
         preview: true,
         images: [
@@ -97,21 +106,21 @@ let categorySelect = function () {
 }
 
 let getPostData = function () {
-    let data = {
-        title : $('#title').val(),
-        content : $('#mdeditor').val(),
-        categoryId : $('#categoryId').val(),
-        status : $('#status').val() === "" ? null : $('#status').val()
-    }
-
-    return data;
+    return {
+        title: $('#title').val(),
+        content: $('#mdeditor').val(),
+        categoryId: $('#categoryId').val(),
+        status: $('#status').val() === "" ? null : $('#status').val()
+    };
 }
 
 let printValidationError = function (errors) {
     $('.is-invalid').removeClass('is-invalid');
 
     errors.forEach(function (error) {
-        $('#' + error.field).addClass('is-invalid').attr('placeholder', error.defaultMessage);
+        let field = $('#' + error.field);
+
+        field.addClass('is-invalid').val("").attr('placeholder', error.defaultMessage);
     })
 }
 
@@ -129,7 +138,7 @@ let createPost = function () {
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
             success: function (result) {
-                if (result.validated == true) {
+                if (result.validated === true) {
                     alert("글이 등록되었습니다");
 
                     location.href = "http://" + location.host + "/post/detail/" + result.data.id;
@@ -191,7 +200,7 @@ let editPost = function () {
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
             success: function (result) {
-                if (result.validated == true) {
+                if (result.validated === true) {
                     alert("글이 수정되었습니다");
 
                     location.href = "http://" + location.host + "/post/detail/" + result.data.id;
@@ -246,14 +255,78 @@ let categoryList = function () {
             let i = 1;
 
             list.forEach(category => {
-                let html = '<tr><td>' + (i++) +  '</td><td>' + category.name + '</td><td>' + category.postCnt + '</td>';
-                html += '<td><a class = "btn-sm btn-primary" href="/category/edit/' + category.id + '">Edit</a></td>'
-                html += '<td><a class = "btn-sm btn-primary" onclick="deleteCategory(' + category.id + ')">Delete</a></td></tr>';
+                let html = '<tr onclick="location.href = \'http://' + location.host + '/post/category/' + category.id + '\'">' +
+                    '<td>' + (i++) + '</td>' +
+                    '<td>' + category.name + '</td>' +
+                    '<td>' + category.postCnt + '</td>' +
+                    '<td><a class = "btn-sm btn-primary" href="/category/edit/' + category.id + '">Edit</a></td>' +
+                    '<td><a class = "btn-sm btn-primary" onclick="deleteCategory(' + category.id + ')">Delete</a></td>' +
+                    '</tr>';
 
                 $('#categoryList').append(html);
             })
         }
     })
+}
+
+let getCategoryData = function () {
+    return {
+        name: $('#name').val()
+    };
+}
+
+let categoryCreate = function () {
+    $('#category-create-button').on('click', function () {
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/category/create',
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(getCategoryData()),
+            success: function (result) {
+                if (result.validated === true) {
+                    alert("카테고리가 생성되었습니다");
+
+                    location.href = "http://" + location.host + "/category";
+                } else {
+                    printValidationError(result.data);
+                }
+            }
+        })
+    })
+}
+
+let editCategory = function () {
+    $(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
+            success: function (result) {
+                $(function () {
+                    $('#name').val(result.name);
+                })
+            }
+        })
+    })
+
+    $('#category-edit-button').on('click', function () {
+        $.ajax({
+            type: 'PUT',
+            url: '/api/v1/category/edit/' + location.pathname.replace(/[^0-9]/g,''),
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(getCategoryData()),
+            success: function (result) {
+                if (result.validated === true) {
+                    alert("카테고리가 수정되었습니다");
+
+                    location.href = "http://" + location.host + "/category";
+                } else {
+                    printValidationError(result.data);
+                }
+            }
+        })
+    });
 }
 
 let deleteCategory = function (id) {

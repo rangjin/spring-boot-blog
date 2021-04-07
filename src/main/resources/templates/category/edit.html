@@ -20,25 +20,25 @@
 <!-- Post Content -->
 <div layout:fragment="content" class="container">
     <div class="row">
-        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; margin-bottom: 50px">
-            <form th:action="@{/category/edit/{id}(id = ${category.getId()})}" th:object="${dto}" class="form form-horizontal" method="post">
+        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; padding-top: 15px; margin-bottom: 50px">
+            <form class="form form-horizontal">
                 <div class="form-group">
                     <label class="col-lg-2 control-label" for="name">Name</label>
                     <div class="col-lg-12">
-                        <input type="text" class="form-control" id="name" name="name"
-                               th:placeholder="${#fields.hasErrors('name') ? #fields.errors('name').get(0) : '카테고리 이름'}"
-                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
-                               th:value="${#fields.hasErrors('name') ? null : category.getName()}"/>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="카테고리 이름"/>
                     </div>
                 </div>
 
                 <div class="form-group" style="float: right;">
-                    <input class="btn btn-primary" type="submit" value="Submit">
+                    <input id="category-edit-button" class="btn btn-primary" type="button" value="Submit">
                 </div>
-
             </form>
         </div>
     </div>
 </div>
+
+<script layout:fragment="script">
+    editCategory();
+</script>
 
 </html>
