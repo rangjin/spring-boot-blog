@@ -351,3 +351,30 @@ let deleteCategory = function (id) {
         })
     }
 }
+
+let adminRegister = function () {
+    $('#admin-register-button').on('click', function () {
+        let data = {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            rePassword: $('#rePassword').val()
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/admin/signup',
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.validated === true) {
+                    alert("관리자 회원 가입에 성공했습니다.");
+
+                    location.href = "http://" + location.host + "/admin/login";
+                } else {
+                    printValidationError(result.data);
+                }
+            }
+        })
+    })
+}

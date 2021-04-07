@@ -19,13 +19,13 @@
 <!-- Post Content -->
 <div layout:fragment="content" class="container">
     <div class="row">
-        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; margin-bottom: 50px">
+        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; padding-top: 15px; margin-bottom: 50px">
             <form class="form form-horizontal">
                 <div class="form-group">
                     <label class="col-lg-2 control-label" for="username">Username</label>
                     <div class="col-lg-12">
                         <input type="text" class="form-control" id="username" name="username"
-                               placeholder="Input Username"/>
+                               placeholder="아이디"/>
                     </div>
                 </div>
 
@@ -33,25 +33,29 @@
                     <label class="col-lg-2 control-label" for="password">Password</label>
                     <div class="col-lg-12">
                         <input type="password" class="form-control" id="password" name="password"
-                               placeholder="Input Password"/>
+                               placeholder="비밀번호"/>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-lg-2 control-label" for="re-password">Re-Password</label>
+                    <label class="col-lg-2 control-label" for="rePassword">Re-Password</label>
                     <div class="col-lg-12">
-                        <input type="password" class="form-control" id="re-password" name="rePassword"
-                               placeholder="Input Password Again"/>
+                        <input type="password" class="form-control" id="rePassword" name="rePassword"
+                               placeholder="비밀번호 재입력"/>
                     </div>
                 </div>
 
                 <div class="form-group" style="float: right;">
-                    <input id="admin-register" class="btn btn-primary" type="submit" value="Submit">
+                    <input id="admin-register-button" class="btn btn-primary" type="button" value="Submit">
                 </div>
 
             </form>
         </div>
     </div>
 </div>
+
+<script layout:fragment="script">
+    adminRegister();
+</script>
 
 </html>

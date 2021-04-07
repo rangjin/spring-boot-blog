@@ -6,6 +6,7 @@ import com.rangjin.springbootblog.domain.validator.RegisterAdminValidator;
 import com.rangjin.springbootblog.service.AdminService;
 import com.rangjin.springbootblog.web.dto.AdminRequestDto;
 import com.rangjin.springbootblog.web.dto.AdminResponseDto;
+import com.rangjin.springbootblog.web.dto.FormResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,23 +32,24 @@ public class AdminApiController {
         new RegisterAdminValidator(adminService).validate(dto, errors);
 
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new FormResponse<>(false, errors), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(adminService.register(dto), HttpStatus.OK);
+        return new ResponseEntity<>(new FormResponse<>(true, adminService.register(dto)), HttpStatus.OK);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody @Valid AdminRequestDto.LoginDto dto, Errors errors) {
-        new LoginAdminValidator(adminService).validate(dto, errors);
-
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new FormResponse<>(false, errors), HttpStatus.OK);
         }
 
         AdminResponseDto responseDto = adminService.findByUsername(dto.getUsername());
 
-        return new ResponseEntity<>(jwtTokenProvider.createToken(String.valueOf(responseDto.getId()), responseDto.getRoles()), HttpStatus.OK);
+        return new ResponseEntity<>(new FormResponse<>(true,
+                jwtTokenProvider.createToken(
+                        String.valueOf(responseDto.getId()), responseDto.getRoles())),
+                HttpStatus.OK);
     }
 
 }
