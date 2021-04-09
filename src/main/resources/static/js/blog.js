@@ -141,6 +141,8 @@ let printValidationError = function (errors) {
             field.addClass('is-invalid').val("").attr('placeholder', error.defaultMessage);
         }
     })
+
+    $('input[type=password]').val("");
 }
 
 let getCookie = function (name) {

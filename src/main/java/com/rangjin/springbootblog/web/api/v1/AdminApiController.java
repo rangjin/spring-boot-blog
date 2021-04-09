@@ -40,6 +40,8 @@ public class AdminApiController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody @Valid AdminRequestDto.LoginDto dto, Errors errors) {
+        new LoginAdminValidator(adminService).validate(dto, errors);
+
         if (errors.hasErrors()) {
             return new ResponseEntity<>(new FormResponse<>(false, errors), HttpStatus.OK);
         }
