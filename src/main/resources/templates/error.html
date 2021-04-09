@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      data-layout-decorate="~{layout/default_layout}">
+
+<!-- Page Header -->
+<header layout:fragment="header" class="masthead" style="background-image: url('/img/post-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Error</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<div layout:fragment="content" class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; padding-top: 15px; margin-bottom: 50px">
+            <form class="form form-horizontal">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="code">Code</label>
+                    <div class="col-lg-12">
+                        <input type="text" class="form-control" id="code" name="code" readonly/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label" for="Message">Message</label>
+                    <div class="col-lg-12">
+                        <input type="password" class="form-control" id="Message" name="Message" readonly/>
+                    </div>
+                </div>
+
+                <div class="form-group" style="float: right;">
+                    <a id="admin-login-button" class="btn btn-primary" type="button" value="Submit">메인 페이지로 돌아가기</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="script">
+    $('#admin-login-button').on('click', function () {
+        let data = {
+            username: $('#username').val(),
+            password: $('#password').val()
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/admin/signin',
+            dataType: 'json',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.validated === true) {
+                    alert("로그인에 성공했습니다.");
+
+                    document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+                    document.cookie = 'jwtToken=' + result.data + "; path=/;";
+                    location.href = "http://" + location.host;
+                } else {
+                    printValidationError(result.data);
+                }
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        })
+    })
+</script>
+
+</html>

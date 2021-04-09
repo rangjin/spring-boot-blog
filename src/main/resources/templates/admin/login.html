@@ -48,33 +48,7 @@
 </div>
 
 <script layout:fragment="script">
-    $('#admin-login-button').on('click', function () {
-        let data = {
-            username: $('#username').val(),
-            password: $('#password').val()
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '/api/v1/admin/signin',
-            dataType: 'json',
-            contentType: 'application/json; charset=UTF-8',
-            data: JSON.stringify(data),
-            success: function (result) {
-                if (result.validated === true) {
-                    alert("로그인에 성공했습니다.");
-
-                    $.cookie('jwtToken', result.data);
-                    location.href = "http://" + location.host;
-                } else {
-                    printValidationError(result.data);
-                }
-            },
-            error: function (result) {
-                console.log(result);
-            }
-        })
-    })
+    adminLogin();
 </script>
 
 </html>
