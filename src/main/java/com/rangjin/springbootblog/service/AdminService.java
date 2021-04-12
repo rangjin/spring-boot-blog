@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 @Service
@@ -22,6 +23,17 @@ public class AdminService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     private final AdminRepository adminRepository;
+
+    @PostConstruct
+    public void init() {
+        Admin admin = Admin.builder()
+                .username("test")
+                .password(passwordEncoder.encode("1234"))
+                .roles(Collections.singletonList("ROLE_ADMIN"))
+                .build();
+
+        adminRepository.save(admin);
+    }
 
     public Long register(AdminRequestDto.RegisterDto dto) {
         Admin admin = Admin.builder()
