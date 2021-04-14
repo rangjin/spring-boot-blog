@@ -281,9 +281,6 @@ let editPost = function () {
         $.ajax({
             type: 'GET',
             url: '/api/v1/post/detail/' + location.pathname.replace(/[^0-9]/g,''),
-            beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
-            },
             success: function (result) {
                 $(function () {
                     $('#title').val(result.title);
@@ -307,6 +304,9 @@ let editPost = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
+            beforeSend : function (xhr) {
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            },
             success: function (result) {
                 if (result.validated === true) {
                     alert("글이 수정되었습니다");
