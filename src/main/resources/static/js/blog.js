@@ -1,23 +1,43 @@
-let auth = function () {
+let auth = function (authenticated, noAuthenticated) {
     $(function () {
-        if (getCookie('jwtToken') === "") {
-            $('.auth').remove();
+        if (getCookie('X-Auth-Token') !== '') {
+            let html = '<li id="logout" class="nav-item"><a class="nav-link" href="/" onclick="logout()">Logout</a></li>';
+            $('#category').after(html);
+
+            authenticated();
         } else {
-            $('.noAuth').remove();
+            let html = '<li id="login" class="nav-item"><a class="nav-link" href="/admin/login">Admin</a></li>';
+            $('#category').after(html);
+
+            noAuthenticated();
         }
     })
 }
 
+let logout = function () {
+    document.cookie = 'X-Auth-Token=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+
+    alert('로그아웃되었습니다');
+}
+
 let index = function () {
     $(function () {
+        let authenticated = function () {
+            let html = '<div class="create" style="float: right;"><a href="/post/create" class="btn-sm btn-primary">Create</a></div>';
+            $('#post-content').before(html);
+        }
+
+        auth(authenticated, null);
+
         $.ajax({
             type: 'GET',
             url: '/api/v1/post/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
+            beforeSend : function (xhr) {
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            },
             success: function (result) {
                 boardList(result.content);
                 page(result.number, result.totalPages, result.first, result.last);
-
-                auth();
             },
             error: function (result) {
                 console.log(result);
@@ -181,7 +201,7 @@ let createPost = function () {
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
                 if (result.validated === true) {
@@ -191,8 +211,6 @@ let createPost = function () {
                 } else {
                     printValidationError(result.data);
                 }
-
-                auth();
             },
             error: function (result) {
                 console.log(result);
@@ -203,9 +221,23 @@ let createPost = function () {
 
 let postDetail = function () {
     $(function () {
+        let authenticated = function () {
+            let html = '<div style="float: right;">' +
+                '<a id="post-edit-button" class="btn-sm btn-primary">Edit</a>' +
+                '<a id="post-delete-button" class="btn-sm btn-primary">Delete</a>' +
+                '</div>';
+
+            $("#in").before(html);
+        }
+
+        auth(authenticated, null);
+
         $.ajax({
             type: 'GET',
             url: '/api/v1' + location.pathname,
+            beforeSend : function (xhr) {
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            },
             success: function (result) {
                 $('#mdeditor').val(result.content);
                 mdEditor();
@@ -219,8 +251,6 @@ let postDetail = function () {
 
                 $('#post-edit-button').attr('href', '/post/edit/' + result.id);
                 $('#post-delete-button').attr('onclick', 'deletePost(' + result.id + ')');
-
-                auth();
             }
         })
     })
@@ -228,12 +258,14 @@ let postDetail = function () {
 
 let editPost = function () {
     $(function () {
+        auth(null, null);
         categorySelect();
+
         $.ajax({
             type: 'GET',
             url: '/api/v1/post/detail/' + location.pathname.replace(/[^0-9]/g,''),
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
                 $(function () {
@@ -244,8 +276,6 @@ let editPost = function () {
 
                     mdEditor();
                 })
-
-                auth();
             }
         })
     })
@@ -278,7 +308,7 @@ let deletePost = function (id) {
             type: 'DELETE',
             url: '/api/v1/post/delete/' + id,
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function () {
                 alert('게시글이 삭제되었습니다');
@@ -290,6 +320,15 @@ let deletePost = function (id) {
 }
 
 let postsFindByCategory = function () {
+    $(function () {
+        let authenticated = function () {
+            let html = '<div class="create" style="float: right;"><a href="/post/create" class="btn-sm btn-primary">Create</a></div>';
+            $('#post-content').before(html);
+        }
+
+        auth(authenticated, null);
+    })
+
     $.ajax({
         type: 'GET',
         url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
@@ -304,8 +343,6 @@ let postsFindByCategory = function () {
         success: function (result) {
             boardList(result.content);
             page(result.number, result.totalPages, result.first, result.last);
-
-            auth();
         }
     })
 }
@@ -321,15 +358,25 @@ let categoryList = function () {
                 let html = '<tr onclick="location.href = \'http://' + location.host + '/post/category/' + category.id + '\'">' +
                     '<td>' + (i++) + '</td>' +
                     '<td>' + category.name + '</td>' +
-                    '<td>' + category.postCnt + '</td>' +
-                    '<td><a class = "auth btn-sm btn-primary" href="/category/edit/' + category.id + '">Edit</a></td>' +
-                    '<td><a class = "auth btn-sm btn-primary" onclick="deleteCategory(' + category.id + ')">Delete</a></td>' +
-                    '</tr>';
+                    '<td>' + category.postCnt + '</td>';
 
-                $('#categoryList').append(html);
+                html += getCookie('X-Auth-Token') === '' ? '</tr>' :
+                    ('<td><a class = "auth btn-sm btn-primary" href="/category/edit/' + category.id + '">Edit</a></td>' +
+                    '<td><a class = "auth btn-sm btn-primary" onclick="deleteCategory(' + category.id + ')">Delete</a></td></tr>')
+                ;
+
+                $('#categoryTableBody').append(html);
             })
 
-            auth();
+            let authenticated = function () {
+                let html = '<div class="auth" style="float: right; margin-bottom: 20px;"><a href="/category/create" class="btn-sm btn-primary">Create</a></div>';
+                $('#categoryTable').before(html);
+
+                html = '<td class="auth">수정</td><td class="auth">삭제</td>';
+                $('#categoryTableHead').append(html);
+            }
+
+            auth(authenticated, null);
         }
     })
 }
@@ -342,7 +389,7 @@ let getCategoryData = function () {
 
 let categoryCreate = function () {
     $(function () {
-        auth();
+        auth(null, null);
     })
 
     $('#category-create-button').on('click', function () {
@@ -353,7 +400,7 @@ let categoryCreate = function () {
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
                 if (result.validated === true) {
@@ -372,6 +419,8 @@ let categoryCreate = function () {
 
 let editCategory = function () {
     $(function () {
+        auth();
+
         $.ajax({
             type: 'GET',
             url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
@@ -391,7 +440,7 @@ let editCategory = function () {
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
                 if (result.validated === true) {
@@ -416,7 +465,7 @@ let deleteCategory = function (id) {
             type: 'DELETE',
             url: '/api/v1/category/delete/' + id,
             beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('jwtToken'));
+                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function () {
                 alert('카테고리와 게시물들이 전부 삭제되었습니다');
@@ -431,6 +480,10 @@ let deleteCategory = function (id) {
 }
 
 let adminRegister = function () {
+    $(function () {
+        auth();
+    })
+
     $('#admin-register-button').on('click', function () {
         let data = {
             username: $('#username').val(),
@@ -452,8 +505,6 @@ let adminRegister = function () {
                 } else {
                     printValidationError(result.data);
                 }
-
-                auth();
             }
         })
     })
@@ -480,10 +531,11 @@ let adminLogin = function () {
                 if (result.validated === true) {
                     alert("로그인에 성공했습니다.");
 
-                    document.cookie = 'jwtToken=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+                    document.cookie = 'X-Auth-Token=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
 
                     let date = new Date(Date.now() + 3600e3);
-                    document.cookie = 'jwtToken=' + result.data + "; path=/; expires=" + date.toGMTString() + ";";
+                    document.cookie = 'X-Auth-Token=' + result.data + "; path=/; expires=" + date.toGMTString() + ";";
+
                     location.href = "http://" + location.host;
                 } else {
                     printValidationError(result.data);

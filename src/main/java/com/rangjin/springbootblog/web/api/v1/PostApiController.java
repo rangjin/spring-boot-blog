@@ -7,6 +7,8 @@ import com.rangjin.springbootblog.web.dto.PostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +23,20 @@ public class PostApiController {
 
     @GetMapping("")
     public ResponseEntity<?> findAll(PageRequest pageRequest) {
-        // 관리자 인증되지 않았을 때
-        // return new ResponseEntity<>(postService.findByStatus(pageRequest), HttpStatus.OK);
-        return new ResponseEntity<>(postService.findAll(pageRequest), HttpStatus.OK);
+        if (SecurityContextHolder.getContext().getAuthentication().getClass() == UsernamePasswordAuthenticationToken.class) {
+            return new ResponseEntity<>(postService.findAll(pageRequest), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(postService.findByStatus(pageRequest), HttpStatus.OK);
+        }
     }
 
     @GetMapping("/category/{id}")
     public ResponseEntity<?> findByCategory(@PathVariable("id") Long id, PageRequest pageRequest) {
-        // 관리자 인증되지 않았을 때
-        // return new ResponseEntity<>(postService.findByStatusAndCategory(id, pageRequest), HttpStatus.OK);
-        return new ResponseEntity<>(postService.findByCategory(id, pageRequest), HttpStatus.OK);
+        if (SecurityContextHolder.getContext().getAuthentication().getClass() == UsernamePasswordAuthenticationToken.class) {
+            return new ResponseEntity<>(postService.findByCategory(id, pageRequest), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(postService.findByStatusAndCategory(id, pageRequest), HttpStatus.OK);
+        }
     }
 
     @GetMapping("/detail/{id}")
