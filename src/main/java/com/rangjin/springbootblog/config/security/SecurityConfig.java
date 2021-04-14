@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .authorizeRequests()
                                 // 인증된 유저만 접근 가능
                                 .antMatchers("/api/v1/post/create", "/api/v1/post/edit/**", "/api/v1/post/delete/**").hasRole("ADMIN")
-                                // .antMatchers("/api/v1/category/create", "/api/v1/category/edit/**", "/api/v1/category/delete/**").hasRole("ADMIN")
+                                .antMatchers("/api/v1/category/create", "/api/v1/category/edit/**", "/api/v1/category/delete/**").hasRole("ADMIN")
                                 // 모든 경로에 대해 권한없이 접근 가능
                                 .anyRequest().permitAll()
                 .and()

@@ -4,12 +4,12 @@ let auth = function (authenticated, noAuthenticated) {
             let html = '<li id="logout" class="nav-item"><a class="nav-link" href="/" onclick="logout()">Logout</a></li>';
             $('#category').after(html);
 
-            authenticated();
+            if (authenticated != null) authenticated();
         } else {
             let html = '<li id="login" class="nav-item"><a class="nav-link" href="/admin/login">Admin</a></li>';
             $('#category').after(html);
 
-            noAuthenticated();
+            if (noAuthenticated != null) noAuthenticated();
         }
     })
 }
@@ -136,6 +136,9 @@ let categorySelect = function () {
 
                 $('#categoryId').append(html);
             })
+        },
+        error: function (result) {
+            console.log(result);
         }
     });
 }
@@ -188,9 +191,14 @@ let getCookie = function (name) {
 
 let createPost = function () {
     $(function () {
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
+
+        auth(null, noAuthenticated);
         mdEditor();
         categorySelect();
-        auth();
     })
 
     $('#post-create-button').on('click', function () {
@@ -251,6 +259,9 @@ let postDetail = function () {
 
                 $('#post-edit-button').attr('href', '/post/edit/' + result.id);
                 $('#post-delete-button').attr('onclick', 'deletePost(' + result.id + ')');
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     })
@@ -258,7 +269,13 @@ let postDetail = function () {
 
 let editPost = function () {
     $(function () {
-        auth(null, null);
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
+
+        auth(null, noAuthenticated);
+
         categorySelect();
 
         $.ajax({
@@ -276,6 +293,9 @@ let editPost = function () {
 
                     mdEditor();
                 })
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     })
@@ -295,28 +315,43 @@ let editPost = function () {
                 } else {
                     printValidationError(result.data);
                 }
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     });
 }
 
 let deletePost = function (id) {
-    let result = confirm('정말로 게시글을 삭제하시겠습니까?');
+    $(function () {
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
 
-    if (result) {
-        $.ajax({
-            type: 'DELETE',
-            url: '/api/v1/post/delete/' + id,
-            beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
-            },
-            success: function () {
-                alert('게시글이 삭제되었습니다');
+        auth(null, noAuthenticated);
 
-                location.href = "http://" + location.host;
-            }
-        })
-    }
+        let result = confirm('정말로 게시글을 삭제하시겠습니까?');
+
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/post/delete/' + id,
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+                },
+                success: function () {
+                    alert('게시글이 삭제되었습니다');
+
+                    location.href = "http://" + location.host;
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            })
+        }
+    })
 }
 
 let postsFindByCategory = function () {
@@ -334,6 +369,9 @@ let postsFindByCategory = function () {
         url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
         success: function (result) {
             $('#categoryInfo').text(result.name + "(" + result.postCnt + ")");
+        },
+        error: function (result) {
+            console.log(result);
         }
     })
 
@@ -343,6 +381,9 @@ let postsFindByCategory = function () {
         success: function (result) {
             boardList(result.content);
             page(result.number, result.totalPages, result.first, result.last);
+        },
+        error: function (result) {
+            console.log(result);
         }
     })
 }
@@ -377,6 +418,9 @@ let categoryList = function () {
             }
 
             auth(authenticated, null);
+        },
+        error: function (result) {
+            console.log(result);
         }
     })
 }
@@ -389,7 +433,12 @@ let getCategoryData = function () {
 
 let categoryCreate = function () {
     $(function () {
-        auth(null, null);
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
+
+        auth(null, noAuthenticated);
     })
 
     $('#category-create-button').on('click', function () {
@@ -410,8 +459,9 @@ let categoryCreate = function () {
                 } else {
                     printValidationError(result.data);
                 }
-
-                auth();
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     })
@@ -419,7 +469,12 @@ let categoryCreate = function () {
 
 let editCategory = function () {
     $(function () {
-        auth();
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
+
+        auth(null, noAuthenticated);
 
         $.ajax({
             type: 'GET',
@@ -428,6 +483,9 @@ let editCategory = function () {
                 $(function () {
                     $('#name').val(result.name);
                 })
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     })
@@ -450,33 +508,43 @@ let editCategory = function () {
                 } else {
                     printValidationError(result.data);
                 }
-
-                auth();
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     });
 }
 
 let deleteCategory = function (id) {
-    let result = confirm("해당 카테고리와 게시물들을 전부 삭제하시겠습니까?");
+    $(function () {
+        let noAuthenticated = function () {
+            alert('로그인 후 이용해주세요');
+            location.href = 'http://' + location.host + '/admin/login';
+        }
 
-    if (result) {
-        $.ajax({
-            type: 'DELETE',
-            url: '/api/v1/category/delete/' + id,
-            beforeSend : function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
-            },
-            success: function () {
-                alert('카테고리와 게시물들이 전부 삭제되었습니다');
+        auth(null, noAuthenticated);
 
-                location.href = 'http://' + location.host;
-            },
-            error: function (error) {
-                console.log(error);
-            }
-        })
-    }
+        let result = confirm("해당 카테고리와 게시물들을 전부 삭제하시겠습니까?");
+
+        if (result) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/category/delete/' + id,
+                beforeSend : function (xhr) {
+                    xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+                },
+                success: function () {
+                    alert('카테고리와 게시물들이 전부 삭제되었습니다');
+
+                    location.href = 'http://' + location.host;
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+    })
 }
 
 let adminRegister = function () {
@@ -505,6 +573,9 @@ let adminRegister = function () {
                 } else {
                     printValidationError(result.data);
                 }
+            },
+            error: function (result) {
+                console.log(result);
             }
         })
     })
