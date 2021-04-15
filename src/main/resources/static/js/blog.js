@@ -430,7 +430,7 @@ let needLogin = function () {
 };
 
 let logout = function () {
-    document.cookie = 'X-Auth-Token=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+    document.cookie = 'X-Auth-Token=; path=/; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     alert('로그아웃되었습니다');
 };
 
