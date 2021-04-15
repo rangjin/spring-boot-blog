@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      data-layout-decorate="~{layout/default_layout}">
+<html data-layout-decorate="~{layout/default_layout}"
+      lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <!-- Page Header -->
-<header layout:fragment="header" class="masthead" style="background-image: url('/img/post-bg.jpg')">
+<header class="masthead" layout:fragment="header" style="background-image: url('/img/post-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
         <div class="row">
@@ -18,22 +18,22 @@
 </header>
 
 <!-- Post Content -->
-<div layout:fragment="content" class="container">
+<div class="container" layout:fragment="content">
     <div class="row">
         <div class="col-lg-12 col-md-10 mx-auto" style="border: 1px gray solid; padding-top: 15px; margin-bottom: 50px">
             <form class="form form-horizontal">
                 <div class="form-group">
                     <label class="col-lg-2 control-label" for="title">Title</label>
                     <div class="col-lg-12">
-                        <input type="text" class="form-control" id="title" name="title" placeholder="게시글 제목"/>
+                        <input class="form-control" id="title" name="title" placeholder="게시글 제목" type="text"/>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Category</label>
                     <div class="col-lg-6">
-                        <select id="categoryId" class="form-control" name="categoryId">
-                            <option class="select-error" value="" hidden>게시글 카테고리</option>
+                        <select class="form-control" id="categoryId" name="categoryId">
+                            <option class="select-error" hidden value="">게시글 카테고리</option>
                         </select>
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Status</label>
                     <div class="col-lg-6">
-                        <select id="status" class="form-control" name="status">
-                            <option class="select-error" value="" hidden>게시글 공개 상태</option>
+                        <select class="form-control" id="status" name="status">
+                            <option class="select-error" hidden value="">게시글 공개 상태</option>
                             <option value="Public">Public</option>
                             <option value="Private">Private</option>
                         </select>
@@ -52,14 +52,14 @@
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Content</label>
                     <div class="col-lg-12">
-                        <textarea id="mdeditor" cols="30" rows="10" class="form-control" name="content" readonly></textarea>
+                        <textarea class="form-control" cols="30" id="mdeditor" name="content" readonly
+                                  rows="10"></textarea>
                     </div>
                 </div>
 
                 <div class="form-group" style="float: right;">
-                    <input id="post-edit-button" class="btn btn-primary" type="button" value="Submit">
+                    <input class="btn btn-primary" id="post-edit-button" type="button" value="Submit">
                 </div>
-
             </form>
         </div>
     </div>

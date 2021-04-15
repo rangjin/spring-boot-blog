@@ -1,64 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      data-layout-decorate="~{layout/default_layout}">
+<html data-layout-decorate="~{layout/default_layout}"
+      lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <!-- Page Header -->
-<header layout:fragment="header"class="masthead" style="background-image: url('/img/home-bg.jpg')">
+<header class="masthead" layout:fragment="header" style="background-image: url('/img/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>Rangjin's Blog</h1>
-          </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>Rangjin's Blog</h1>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 </header>
 
 <!-- Main Content -->
-<div layout:fragment="content" class="container">
-  <div class="row">
-    <div class="font col-lg-8 col-md-10 mx-auto" style="margin-bottom: 50px;">
-      <div id="post-content" class="post-preview">
-        <!-- content -->
-      </div>
+<div class="container" layout:fragment="content">
+    <div class="row">
+        <div class="font col-lg-8 col-md-10 mx-auto" style="margin-bottom: 50px;">
+            <div class="post-preview" id="post-content">
+                <!-- content -->
+            </div>
 
-      <!-- Pager -->
-      <div>
-        <nav style="margin-top: 15px;">
-          <ul class="pagination justify-content-center">
-            <li id="move-to-first" class="page-item">
-              <a class="page-link">
-                <span><<</span>
-              </a>
-            </li>
-            <li id="move-to-previous" class="page-item">
-              <a class="page-link">
-                <span><</span>
-              </a>
-            </li>
-            <li id="move-to-next" class="page-item">
-              <a class="page-link">
-                <span>&gt;</span>
-              </a>
-            </li>
-            <li id="move-to-last" class="page-item">
-              <a class="page-link">
-                <span>>></span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
+            <!-- Pager -->
+            <div>
+                <nav style="margin-top: 15px;">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" id="move-to-first">
+                            <a class="page-link">
+                                <span><<</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="move-to-previous">
+                            <a class="page-link">
+                                <span><</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="move-to-next">
+                            <a class="page-link">
+                                <span>&gt;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" id="move-to-last">
+                            <a class="page-link">
+                                <span>>></span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script layout:fragment="script">
-  index();
+    index();
 </script>
 
 </html>

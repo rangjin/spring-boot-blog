@@ -1,44 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      data-layout-decorate="~{layout/default_layout}">
+<html data-layout-decorate="~{layout/default_layout}"
+      lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <!-- Page Header -->
-<header layout:fragment="header" class="masthead" style="background-image: url('/img/post-bg.jpg')">
-  <div class="overlay"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-md-10 mx-auto">
-        <div class="post-heading">
-          <h1 id="post-title"></h1>
-          <span class="meta">
+<header class="masthead" layout:fragment="header" style="background-image: url('/img/post-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-md-10 mx-auto">
+                <div class="post-heading">
+                    <h1 id="post-title"></h1>
+                    <span class="meta">
             Category <strong id="post-category-name"></strong>
             <br>
             Posted at <strong id="post-updated-at"></strong>
           </span>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </header>
 
 <!-- Post Content -->
 <article layout:fragment="content">
-  <div class="container">
-    <div class="row">
-      <div class="font col-lg-10 col-md-10 mx-auto" style="margin-bottom: 50px;">
-        <div id="in">
-          <textarea id="mdeditor" cols="30" rows="10" class="form-control" name="content" readonly></textarea>
+    <div class="container">
+        <div class="row">
+            <div class="font col-lg-10 col-md-10 mx-auto" style="margin-bottom: 50px;">
+                <div id="in">
+                    <textarea class="form-control" cols="30" id="mdeditor" name="content" readonly rows="10"></textarea>
+                </div>
+                <div class="mdeditor" id="out" style="margin-top: 40px;"></div>
+            </div>
         </div>
-        <div id="out" class="mdeditor" style="margin-top: 30px;"></div>
-      </div>
     </div>
-  </div>
 </article>
 
 <script layout:fragment="script">
-  postDetail();
+    postDetail();
 </script>
 
 </html>
