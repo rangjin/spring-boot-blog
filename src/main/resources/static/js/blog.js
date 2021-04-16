@@ -1,8 +1,20 @@
+$(function () {
+    if (getCookie('X-Auth-Token') !== '') {
+        let tokenCheckInterval = setInterval(function () {
+            if (getCookie('X-Auth-Token') === '') {
+                alert("다시 로그인 한 후 이용해 주십시오");
+                clearInterval(tokenCheckInterval);
+                location.href = "http://" + location.host;
+            }
+        }, 1000);
+    }
+});
+
 let index = function () {
     $.ajax({
         type: 'GET',
         url: '/api/v1/post/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
-        beforeSend : function (xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
         },
         success: function (result) {
@@ -25,7 +37,7 @@ let index = function () {
 let postsFindByCategory = function () {
     $.ajax({
         type: 'GET',
-        url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
+        url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g, ''),
         success: function (result) {
             let authenticated = function () {
                 let html = '<div class="create" style="float: right;"><a href="/post/create" class="btn-sm btn-primary">Create</a></div>';
@@ -58,7 +70,7 @@ let postDetail = function () {
     $.ajax({
         type: 'GET',
         url: '/api/v1' + location.pathname,
-        beforeSend : function (xhr) {
+        beforeSend: function (xhr) {
             xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
         },
         success: function (result) {
@@ -104,7 +116,7 @@ let createPost = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
@@ -128,7 +140,7 @@ let editPost = function () {
 
     $.ajax({
         type: 'GET',
-        url: '/api/v1/post/detail/' + location.pathname.replace(/[^0-9]/g,''),
+        url: '/api/v1/post/detail/' + location.pathname.replace(/[^0-9]/g, ''),
         success: function (result) {
             $('#title').val(result.title);
             $('#status').find($('option[value=' + result.status + ']')).attr('selected', 'selected');
@@ -147,11 +159,11 @@ let editPost = function () {
     $('#post-edit-button').on('click', function () {
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/post/edit/' + location.pathname.replace(/[^0-9]/g,''),
+            url: '/api/v1/post/edit/' + location.pathname.replace(/[^0-9]/g, ''),
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
@@ -177,7 +189,7 @@ let deletePost = function (id) {
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/post/delete/' + id,
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function () {
@@ -257,7 +269,7 @@ let categoryCreate = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
@@ -281,7 +293,7 @@ let editCategory = function () {
 
     $.ajax({
         type: 'GET',
-        url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g,''),
+        url: '/api/v1/category/' + location.pathname.replace(/[^0-9]/g, ''),
         success: function (result) {
             $('#name').val(result.name);
         },
@@ -293,11 +305,11 @@ let editCategory = function () {
     $('#category-edit-button').on('click', function () {
         $.ajax({
             type: 'PUT',
-            url: '/api/v1/category/edit/' + location.pathname.replace(/[^0-9]/g,''),
+            url: '/api/v1/category/edit/' + location.pathname.replace(/[^0-9]/g, ''),
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function (result) {
@@ -323,7 +335,7 @@ let deleteCategory = function (id) {
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/category/delete/' + id,
-            beforeSend : function (xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
             },
             success: function () {
@@ -389,8 +401,9 @@ let adminLogin = function () {
                 if (result.validated) {
                     alert("로그인에 성공했습니다.");
 
+                    let date = new Date(Date.now() + 3600e3);
                     document.cookie = 'X-Auth-Token=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
-                    document.cookie = 'X-Auth-Token=' + result.data + "; path=/";
+                    document.cookie = 'X-Auth-Token=' + result.data + "; path=/; expires=" + date.toGMTString() + ";";
 
                     location.href = "http://" + location.host;
                 } else {
@@ -469,11 +482,11 @@ jQuery.extend({
         let cmpString = strParamName + "=";
         let cmpLen = cmpString.length;
 
-        if (strHref.indexOf("?") > -1){
+        if (strHref.indexOf("?") > -1) {
             let strQueryString = strHref.substr(strHref.indexOf("?") + 1);
             let aQueryString = strQueryString.split("&");
             for (let iParam = 0; iParam < aQueryString.length; iParam++) {
-                if (aQueryString[iParam].substr(0,cmpLen) === cmpString) {
+                if (aQueryString[iParam].substr(0, cmpLen) === cmpString) {
                     let aParam = aQueryString[iParam].split("=");
                     strReturn = aParam[1];
                     bFound = true;
@@ -530,8 +543,7 @@ let mdEditor = function () {
     new MdEditor('#mdeditor', {
         uploader: 'http://local.dev/Lab/MdEditor/app/upload.php',
         preview: true,
-        images: [
-        ]
+        images: []
     });
 };
 
