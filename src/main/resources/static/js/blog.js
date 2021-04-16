@@ -17,7 +17,7 @@ let index = function () {
             page(result.number, result.totalPages, result.first, result.last);
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 };
@@ -37,7 +37,7 @@ let postsFindByCategory = function () {
             $('#categoryInfo').text(result.name + "(" + result.postCnt + ")");
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 
@@ -49,7 +49,7 @@ let postsFindByCategory = function () {
             page(result.number, result.totalPages, result.first, result.last);
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 };
@@ -87,7 +87,7 @@ let postDetail = function () {
             $('#post-delete-button').attr('onclick', 'deletePost(' + result.id + ')');
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 };
@@ -117,7 +117,7 @@ let createPost = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
@@ -140,7 +140,7 @@ let editPost = function () {
             });
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 
@@ -164,7 +164,7 @@ let editPost = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
@@ -186,7 +186,7 @@ let deletePost = function (id) {
                 location.href = "http://" + location.host;
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     }
@@ -206,7 +206,7 @@ let categorySelect = function (callback) {
             if (callback !== null) callback();
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 };
@@ -242,7 +242,7 @@ let categoryList = function () {
             auth(authenticated, null);
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 };
@@ -270,7 +270,7 @@ let categoryCreate = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
@@ -286,7 +286,7 @@ let editCategory = function () {
             $('#name').val(result.name);
         },
         error: function (error) {
-            callErrorPage(error.responseText);
+            controllerError(error.responseText);
         }
     });
 
@@ -310,7 +310,7 @@ let editCategory = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
@@ -332,7 +332,7 @@ let deleteCategory = function (id) {
                 location.href = 'http://' + location.host;
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     }
@@ -364,7 +364,7 @@ let adminRegister = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
@@ -389,9 +389,8 @@ let adminLogin = function () {
                 if (result.validated) {
                     alert("로그인에 성공했습니다.");
 
-                    let date = new Date(Date.now() + 3600e3);
                     document.cookie = 'X-Auth-Token=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
-                    document.cookie = 'X-Auth-Token=' + result.data + "; path=/; expires=" + date.toGMTString() + ";";
+                    document.cookie = 'X-Auth-Token=' + result.data + "; path=/";
 
                     location.href = "http://" + location.host;
                 } else {
@@ -399,15 +398,42 @@ let adminLogin = function () {
                 }
             },
             error: function (error) {
-                callErrorPage(error.responseText);
+                controllerError(error.responseText);
             }
         });
     });
 };
 
+let errorMessage = {
+    1000: "예기치 못한 오류가 발생했습니다",
+    1001: "해당 포스트가 존재하지 않습니다",
+    1002: "해당 카테고리가 존재하지 않습니다",
+    1003: "해당 관리자가 존재하지 않습니다",
+    1004: "다시 로그인 한 후 이용해 주십시오",
+    1005: "해당 페이지에 접근 권한이 없습니다"
+};
+
+let controllerError = function (error) {
+    let data = JSON.parse(error);
+
+    if (data.code === 1004) {
+        alert(errorMessage["1004"]);
+        logout();
+        location.href = "http://" + location.host;
+    } else {
+        callErrorPage(data);
+    }
+};
+
+let callErrorPage = function (data) {
+    location.href = "http://" + location.host + "/error?code=" + data.code;
+};
+
 let errorPage = function () {
-    $('#code').val($.getURLParam("code"));
-    $('#message').val($.getURLParam("msg"));
+    let code = $.getURLParam("code");
+
+    $('#code').val(code);
+    $('#message').val(errorMessage[code]);
 };
 
 let auth = function (authenticated, noAuthenticated) {
@@ -559,9 +585,4 @@ let printValidationError = function (errors) {
     });
 
     $('input[type=password]').val("");
-};
-
-let callErrorPage = function (error) {
-    let data = JSON.parse(error);
-    location.href = "http://" + location.host + "/error?code=" + data.code + "&msg=" + data.msg;
 };
