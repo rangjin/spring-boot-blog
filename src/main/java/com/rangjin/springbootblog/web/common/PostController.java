@@ -34,9 +34,4 @@ public class PostController {
         return "post/edit";
     }
 
-    @GetMapping("error")
-    public String error() {
-        return "error";
-    }
-
 }
