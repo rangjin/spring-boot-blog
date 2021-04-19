@@ -1,6 +1,8 @@
+let tokenCheckInterval;
+
 $(function () {
     if (getCookie('X-Auth-Token') !== '') {
-        let tokenCheckInterval = setInterval(function () {
+         tokenCheckInterval = setInterval(function () {
             if (getCookie('X-Auth-Token') === '') {
                 alert("다시 로그인 한 후 이용해 주십시오");
                 clearInterval(tokenCheckInterval);
@@ -47,18 +49,18 @@ let postsFindByCategory = function () {
             auth(authenticated, null);
 
             $('#categoryInfo').text(result.name + "(" + result.postCnt + ")");
-        },
-        error: function (error) {
-            controllerError(error.responseText);
-        }
-    });
 
-    $.ajax({
-        type: 'GET',
-        url: '/api/v1' + location.pathname + '/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
-        success: function (result) {
-            boardList(result.content);
-            page(result.number, result.totalPages, result.first, result.last);
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1' + location.pathname + '/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
+                success: function (result) {
+                    boardList(result.content);
+                    page(result.number, result.totalPages, result.first, result.last);
+                },
+                error: function (error) {
+                    controllerError(error.responseText);
+                }
+            });
         },
         error: function (error) {
             controllerError(error.responseText);
@@ -417,36 +419,14 @@ let adminLogin = function () {
     });
 };
 
-let errorMessage = {
-    1000: "예기치 못한 오류가 발생했습니다",
-    1001: "해당 포스트가 존재하지 않습니다",
-    1002: "해당 카테고리가 존재하지 않습니다",
-    1003: "해당 관리자가 존재하지 않습니다",
-    1004: "다시 로그인 한 후 이용해 주십시오",
-    1005: "해당 페이지에 접근 권한이 없습니다"
-};
-
 let controllerError = function (error) {
     let data = JSON.parse(error);
 
-    if (data.code === 1004) {
-        alert(errorMessage["1004"]);
-        logout();
-        location.href = "http://" + location.host;
-    } else {
-        callErrorPage(data);
-    }
-};
+    alert(data.msg);
 
-let callErrorPage = function (data) {
-    location.href = "http://" + location.host + "/error?code=" + data.code;
-};
+    if (data.code === 1004) logout();
 
-let errorPage = function () {
-    let code = $.getURLParam("code");
-
-    $('#code').val(code);
-    $('#message').val(errorMessage[code]);
+    location.href = "http://" + location.host;
 };
 
 let auth = function (authenticated, noAuthenticated) {
@@ -469,6 +449,7 @@ let needLogin = function () {
 };
 
 let logout = function () {
+    clearInterval(tokenCheckInterval);
     document.cookie = 'X-Auth-Token=; path=/; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
     alert('로그아웃되었습니다');
 };
@@ -592,7 +573,7 @@ let printValidationError = function (errors) {
         if (field.prop('tagName') === "SELECT") {
             field.addClass('is-invalid').find('.select-error').text(error.defaultMessage);
         } else {
-            field.addClass('is-invalid').val("").attr('placeholder', error.defaultMessage);
+            field.addClass('is-invalid').val("").attr('placeholder', error. defaultMessage);
         }
     });
 
