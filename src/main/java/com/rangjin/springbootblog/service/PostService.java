@@ -23,26 +23,26 @@ public class PostService {
     private final CategoryRepository categoryRepository;
 
     public Page<PostResponseDto> findAll(PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "createdAt");
 
         return postRepository.findAll(pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Page<PostResponseDto> findByStatus(PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "createdAt");
 
         return postRepository.findByStatus(PostStatus.Public, pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Page<PostResponseDto> findByCategory(Long id, PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "createdAt");
         Category category = categoryRepository.findById(id).orElseThrow(CustomCategoryNotFoundException::new);
 
         return postRepository.findByCategory(category, pageRequest.of()).map(PostResponseDto::new);
     }
 
     public Page<PostResponseDto> findByStatusAndCategory(Long id, PageRequest pageRequest) {
-        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "updatedAt");
+        pageRequest.set(pageRequest.getPage(), 10, Sort.Direction.DESC, "createdAt");
         Category category = categoryRepository.findById(id).orElseThrow(CustomCategoryNotFoundException::new);
 
         return postRepository.findByStatusAndCategory(PostStatus.Public, category, pageRequest.of())

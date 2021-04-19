@@ -94,7 +94,12 @@ let postDetail = function () {
             $('#in').remove();
 
             $('#post-title').text(result.title);
-            $('#post-updated-at').text(new Date(result.updatedAt).toLocaleString());
+            $('#post-created-at').text(new Date(result.createdAt).toLocaleString());
+
+            if (result.updatedAt !== result.createdAt) {
+                $('.meta').append('<br>Updated at <strong>' + new Date(result.updatedAt).toLocaleString() + '</strong>');
+            }
+
             $('#post-category-name').text(result.categoryName);
 
             $('#post-edit-button').attr('href', '/post/edit/' + result.id);
@@ -489,9 +494,13 @@ let boardList = function (list) {
             '<p class="post-meta">' +
             'Category <strong>' + post.categoryName + '</strong>' +
             '<br>' +
-            'Posted at <strong>' + new Date(post.updatedAt).toLocaleString() + '</strong>' +
-            '</p>' +
-            '<hr>';
+            'Posted at <strong>' + new Date(post.createdAt).toLocaleDateString() + '</strong>';
+
+        if (post.updatedAt !== post.createdAt) {
+            html += ' (updated at <strong>' + new Date(post.updatedAt).toLocaleDateString() + '</strong>)';
+        }
+
+        html += '</p><hr>';
 
         $('.post-preview').append(html);
     });
