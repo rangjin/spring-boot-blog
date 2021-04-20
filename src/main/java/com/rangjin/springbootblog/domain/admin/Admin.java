@@ -11,10 +11,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Builder
 @Entity
@@ -32,13 +31,11 @@ public class Admin extends BaseTimeEntity implements UserDetails {
 
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private AdminRole role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return Stream.of(role.getValue()).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override

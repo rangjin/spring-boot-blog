@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ public class JwtTokenProvider {
     }
 
     // Jwt 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
+    public String createToken(String userPk, String role) {
         Claims claims = Jwts.claims().setSubject(userPk);
-        claims.put("roles", roles);
+        claims.put("roles", Collections.singletonList(role));
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 데이터

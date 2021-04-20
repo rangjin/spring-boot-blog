@@ -50,7 +50,7 @@ public class AdminApiController {
 
         return new ResponseEntity<>(new FormResponse<>(true,
                 jwtTokenProvider.createToken(
-                        String.valueOf(responseDto.getId()), responseDto.getRoles())),
+                        String.valueOf(responseDto.getId()), responseDto.getRole().getValue())),
                 HttpStatus.OK);
     }
 

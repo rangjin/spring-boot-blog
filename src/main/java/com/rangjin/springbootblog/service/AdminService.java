@@ -1,9 +1,9 @@
 package com.rangjin.springbootblog.service;
 
 import com.rangjin.springbootblog.advice.exception.CustomAdminNotFoundException;
-import com.rangjin.springbootblog.config.security.JwtTokenProvider;
 import com.rangjin.springbootblog.domain.admin.Admin;
 import com.rangjin.springbootblog.domain.admin.AdminRepository;
+import com.rangjin.springbootblog.domain.admin.AdminRole;
 import com.rangjin.springbootblog.web.dto.AdminRequestDto;
 import com.rangjin.springbootblog.web.dto.AdminResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class AdminService implements UserDetailsService {
         Admin admin = Admin.builder()
                 .username("test")
                 .password(passwordEncoder.encode("1234"))
-                .roles(Collections.singletonList("ROLE_ADMIN"))
+                .role(AdminRole.Admin)
                 .build();
 
         adminRepository.save(admin);
@@ -39,7 +38,7 @@ public class AdminService implements UserDetailsService {
         Admin admin = Admin.builder()
                 .username(dto.getUsername())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .roles(Collections.singletonList("ROLE_ADMIN"))
+                .role(AdminRole.Admin)
                 .build();
 
         return adminRepository.save(admin).getId();
