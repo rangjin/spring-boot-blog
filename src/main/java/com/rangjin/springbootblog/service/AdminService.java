@@ -23,17 +23,6 @@ public class AdminService implements UserDetailsService {
 
     private final AdminRepository adminRepository;
 
-    @PostConstruct
-    public void init() {
-        Admin admin = Admin.builder()
-                .username("test")
-                .password(passwordEncoder.encode("1234"))
-                .role(AdminRole.Admin)
-                .build();
-
-        adminRepository.save(admin);
-    }
-
     public Long register(AdminRequestDto.RegisterDto dto) {
         Admin admin = Admin.builder()
                 .username(dto.getUsername())
