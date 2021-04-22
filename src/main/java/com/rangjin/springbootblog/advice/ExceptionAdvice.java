@@ -43,7 +43,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(CustomAccessDeniedException.class)
     protected ResponseEntity<ErrorResponse> accessDeniedException() {
-        return new ResponseEntity<>(new ErrorResponse(1005, "해당 페이지에 접근 권한이 없습니다"),
+        return new ResponseEntity<>(new ErrorResponse(1005, "회원가입 승인 대기 상태입니다"),
                 HttpStatus.FORBIDDEN);
     }
 

@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-
 @Service
 @RequiredArgsConstructor
 public class AdminService implements UserDetailsService {
@@ -27,7 +25,7 @@ public class AdminService implements UserDetailsService {
         Admin admin = Admin.builder()
                 .username(dto.getUsername())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .role(AdminRole.Admin)
+                .role(AdminRole.Waiting)
                 .build();
 
         return adminRepository.save(admin).getId();
