@@ -16,8 +16,8 @@ let index = function () {
     $.ajax({
         type: 'GET',
         url: '/api/v1/post/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+        headers: {
+            'X-Auth-Token': getCookie('X-Auth-Token')
         },
         success: function (result) {
             let authenticated = function () {
@@ -48,19 +48,24 @@ let postsFindByCategory = function () {
 
             auth(authenticated, null);
 
-            $('#categoryInfo').text(result.name + "(" + result.postCnt + ")");
+            $('#categoryInfo').text(result.name);
+        },
+        error: function (error) {
+            controllerError(error.responseText);
+        }
+    });
 
-            $.ajax({
-                type: 'GET',
-                url: '/api/v1' + location.pathname + '/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
-                success: function (result) {
-                    boardList(result.content);
-                    page(result.number, result.totalPages, result.first, result.last);
-                },
-                error: function (error) {
-                    controllerError(error.responseText);
-                }
-            });
+    $.ajax({
+        type: 'GET',
+        url: '/api/v1' + location.pathname + '/?page=' + ($.getURLParam("page") === null ? 1 : $.getURLParam("page")),
+        headers: {
+            'X-Auth-Token': getCookie('X-Auth-Token')
+        },
+        success: function (result) {
+            $('#categoryInfo').text($('#categoryInfo').text() + "(" + result.totalElements + ")");
+
+            boardList(result.content);
+            page(result.number, result.totalPages, result.first, result.last);
         },
         error: function (error) {
             controllerError(error.responseText);
@@ -72,8 +77,8 @@ let postDetail = function () {
     $.ajax({
         type: 'GET',
         url: '/api/v1' + location.pathname,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+        headers: {
+            'X-Auth-Token': getCookie('X-Auth-Token')
         },
         success: function (result) {
             let authenticated = function () {
@@ -123,8 +128,8 @@ let createPost = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function (result) {
                 if (result.validated) {
@@ -170,8 +175,8 @@ let editPost = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getPostData()),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function (result) {
                 if (result.validated) {
@@ -196,8 +201,8 @@ let deletePost = function (id) {
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/post/delete/' + id,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function () {
                 alert('게시글이 삭제되었습니다');
@@ -276,8 +281,8 @@ let categoryCreate = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function (result) {
                 if (result.validated) {
@@ -316,8 +321,8 @@ let editCategory = function () {
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
             data: JSON.stringify(getCategoryData()),
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function (result) {
                 if (result.validated) {
@@ -342,8 +347,8 @@ let deleteCategory = function (id) {
         $.ajax({
             type: 'DELETE',
             url: '/api/v1/category/delete/' + id,
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-Auth-Token", getCookie('X-Auth-Token'));
+            headers: {
+                'X-Auth-Token': getCookie('X-Auth-Token')
             },
             success: function () {
                 alert('카테고리와 게시물들이 전부 삭제되었습니다');
